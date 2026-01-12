@@ -1,0 +1,143 @@
+<nav class="navbar navbar-expand-lg bg-white topbar">
+  <div class="container-fluid px-3 px-md-4">
+    <!-- Кнопка открытия шторки -->
+    <button
+      class="btn btn-outline-primary me-2 btn-openFirstOffcanvas"
+      type="button"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#sidebarRoutes"
+    >
+      <i class="bi bi-list"></i>
+    </button>
+
+    <!-- Логотип / название -->
+    <a class="navbar-brand fw-semibold" href="#">Marsruti.lv</a>
+
+    <div class="d-flex">
+      <div
+        class="btn-group w-100 justify-content-center d-flex me-3 hide-route d-none"
+        role="group"
+      >
+        <button class="btn btn-info">{{ translations['close-button'] }}</button>
+      </div>
+
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#topbarControls"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+
+    <!-- Основные кнопки и фильтры -->
+    <div class="collapse navbar-collapse hide" id="topbarControls">
+      <ul
+        class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center flex-column flex-lg-row w-100"
+      >
+        <!-- Поиск остановки -->
+        <li
+          class="nav-item me-lg-2 my-2 my-lg-0 w-100 w-lg-auto order-1 route-search"
+        >
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-search"></i></span>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="{{ translations['station-search'] }}"
+              id="stopSearch"
+            />
+          </div>
+        </li>
+
+        <!-- Режим отображения -->
+        <li class="nav-item dropdown me-lg-2 w-100 w-lg-auto order-2">
+          <a
+            class="btn btn-outline-secondary w-100 settings"
+            href="#settingModalToggle"
+            data-bs-toggle="modal"
+            id="viewDropdown"
+          >
+            {{ translations['settings'] }}
+          </a>
+        </li>
+
+        <!-- Тогглы транспорта -->
+        <li class="nav-item ms-lg-1 w-100 w-lg-auto order-3">
+          <div class="btn-group transports-show w-100" role="group">
+            <input type="checkbox" class="btn-check" id="filterBus" checked />
+            <label
+              class="btn btn-outline-success filter-bus"
+              for="filterBus"
+              data-bs-toggle="tooltip"
+              data-bs-placement="bottom"
+              data-bs-title="{{ translations['bus'] }}"
+              ><i class="bi bi-bus-front"></i
+            ></label>
+
+            <input
+              type="checkbox"
+              class="btn-check"
+              id="filterMinibus"
+              checked
+            />
+            <label
+              class="btn btn-outline-primary filter-minibus"
+              for="filterMinibus"
+              data-bs-toggle="tooltip"
+              data-bs-placement="bottom"
+              data-bs-title="{{ translations['minibus'] }}"
+              ><i class="bi bi-truck"></i
+            ></label>
+
+            <input type="checkbox" class="btn-check" id="filterTram" checked />
+            <label
+              class="btn btn-outline-warning filter-tram"
+              for="filterTram"
+              data-bs-toggle="tooltip"
+              data-bs-placement="bottom"
+              data-bs-title="{{ translations['tram'] }}"
+              ><i class="bi bi-train-front"></i
+            ></label>
+          </div>
+        </li>
+
+        <!-- Кнопка для показывания остановок -->
+        <li
+          class="nav-item ms-lg-1 w-100 w-lg-auto order-4"
+          style="margin-right: 10px"
+        >
+          <div
+            class="btn-group show-stations w-100 justify-content-center"
+            role="group"
+          >
+            <input type="checkbox" class="btn-check" id="filterStation" />
+            <label
+              data-bs-toggle="tooltip"
+              data-bs-placement="bottom"
+              data-bs-title="{{ translations['stations'] }}"
+              class="btn btn-outline-primary"
+              for="filterStation"
+              style="width: 42px; height: 38px; position: relative"
+            >
+              <div
+                style="
+                  background-color: #3388ff;
+                  width: 18px;
+                  height: 18px;
+                  border-radius: 50%;
+                  border: 3px solid white;
+                  position: absolute;
+                  top: 50%;
+                  left: 50%;
+                  transform: translate(-49%, -50%);
+                "
+              ></div>
+            </label>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

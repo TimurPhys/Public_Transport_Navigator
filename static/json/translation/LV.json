@@ -1,0 +1,61 @@
+{
+  "current-language": "LV",
+  "site_title": "Vietnes virsraksts",
+
+  "bus": "Autobusi",
+  "minibus": "Minibusi",
+  "tram": "Tramvaji",
+  "stations": "Pieturas",
+  "bus-singular": "Autobuss",
+  "minibus-singular": "Minibuss",
+  "tram-singular": "Tramvajs",
+  "settings": "Iestatījumi",
+  "station-search": "Meklēt pieturu vai maršrutu",
+  "close-button": "Aizvērt maršrutu",
+
+  "first-sidebar-header-h1": "Maršruti un saraksts",
+  "first-sidebar-header-p": "Izvēlieties maršrutu, lai redzētu kustību kartē",
+  "route-filter-title": "Maršrutu filtrs",
+  "route-filter-placeholder": "Ievadiet numuru vai nosaukumu",
+  "connection-state-title": "Statuss",
+  "connected": "Savienots",
+  "no_answer": "Vietne neatbild",
+  "disconnected": "Izslēgts",
+  "reconnection": "Atkārtota savienošana",
+  "transports-quantity": "Transportlīdzekļu daudzums",
+
+  "second-sidebar-header-h1": "Maršruta saraksts",
+  "also-attend": "Arī apmeklē",
+  "working-days": "Darba dienas",
+  "holidays": "Brīvdienas",
+  "carrier": "Pārvadātājs:",
+  "carrier-name": " A/S Liepājas autobusu parks",
+  "hints": "Padomi",
+  "hints-text": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Saepe, quod?",
+
+  "type": "Veids",
+  "route": "Maršruts",
+  "number": "Numurs",
+
+  "station": "Pietura",
+  "station-name": "Nosaukums",
+  "routes": "Maršruti",
+  "nearest-times": "Tuvākie laiki",
+  "direction": "Virziens",
+  "add-info": "Papildu informācija",
+  "here": "šeit",
+
+  "language": "Valoda",
+  "ru": "Krievu",
+  "lv": "Latviešu",
+  "en": "Angļu",
+  "lt": "Lietuviešu",
+
+  "map-type": "Kartes veids",
+  "standard": "Standarta",
+  "dark": "Tumšā",
+  "osm": "OSM karte",
+  "sattelite": "Satelītkarte",
+
+  "apply-button": "Piemērot"
+}

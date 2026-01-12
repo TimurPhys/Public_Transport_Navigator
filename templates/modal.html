@@ -1,0 +1,91 @@
+<!-- Vertically centered modal -->
+<div
+  class="modal fade"
+  id="settingModalToggle"
+  aria-labelledby="settingModalToggleLabel"
+  tabindex="-1"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="settingModalToggleLabel">
+          {{ translations['settings'] }}
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form action="/settings" id="settingsForm" method="POST">
+          <div class="form-group mb-2">
+            <label for="languageSelect">{{ translations['language'] }}:</label>
+            <select
+              class="form-select"
+              name="language"
+              id="languageSelect"
+              required
+            >
+              <option value="RU">{{ translations['ru'] }}</option>
+              <option value="LV">{{ translations['lv'] }}</option>
+              <!-- <option value="EN">EN</option>
+              <option value="LT">LT</option> -->
+            </select>
+          </div>
+          <div class="form-group mb-2">
+            <label for="mapSelect">{{ translations['map-type'] }}:</label>
+            <select class="form-select" name="map-type" id="mapSelect" required>
+              <option value="standard">{{ translations['standard'] }}</option>
+              <option value="dark">{{ translations['dark'] }}</option>
+              <option value="osm">{{ translations['osm'] }}</option>
+              <option value="satellite">{{ translations['sattelite'] }}</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          class="btn btn-primary"
+          type="submit"
+          onclick="submitSettingsForm()"
+          data-bs-dismiss="modal"
+        >
+          {{ translations['apply-button'] }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  async function submitSettingsForm() {
+    const formData = new FormData(document.getElementById("settingsForm"));
+
+    fetch("/settings", {
+      method: "POST",
+      body: formData,
+    }).then((response) => {
+      // Обработка ответа
+      console.log("Настройки сохранены");
+      console.log(response);
+      if (response.status === 200) {
+        window.location.reload();
+      } else {
+        const error = response.text();
+        console.error("Ошибка:", error);
+        alert("Ошибка при сохранении");
+      }
+    });
+  }
+</script>
+<script type="module">
+  import { mapType, translations } from "../static/json/parse_json.js";
+
+  const select_language = document.getElementById("languageSelect");
+  select_language.value = translations["current-language"];
+
+  const select_map = document.getElementById("mapSelect");
+  select_map.value = mapType;
+</script>
