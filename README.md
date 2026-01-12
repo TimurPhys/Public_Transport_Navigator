@@ -1,5 +1,5 @@
 ## Website for navigating and viewing public transport in real time
----
+
 ### Project advantages:
 1. __Customized icon system__ - new vehicle icons (each vehicle type has its own icon) and stop icons were created and personally drawn for the project.
 
