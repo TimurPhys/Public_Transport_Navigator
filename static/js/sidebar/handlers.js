@@ -36,7 +36,7 @@ function setHandlerOnButtons(row_div, direction, route_name, station_buttons) {
           direction,
           route_name,
           station_name,
-          station_buttons
+          station_buttons,
         );
         const cur_time = e.target.querySelector("strong").textContent.trim();
         if (cur_time) {
@@ -70,7 +70,8 @@ function setHandlersOnLinks(route_name, direction, station_buttons) {
 
       const table = minute_link.closest("table");
       const tables = table.closest("div").querySelectorAll("table");
-      const table_index = Array.from(tables).indexOf(table);
+      const table_index = Number(table.getAttribute("data-table-index"));
+      console.log(table, table_index);
 
       const other_route_name = minute_link.id.split("_")[1];
 
@@ -84,7 +85,7 @@ function setHandlersOnLinks(route_name, direction, station_buttons) {
           route_name,
           table_index,
           station_buttons,
-          active_button_index
+          active_button_index,
         );
 
         let i = 0;
@@ -116,7 +117,7 @@ function setHandlersOnLinks(route_name, direction, station_buttons) {
             !other_route_name.includes("s")
               ? other_route_name.toUpperCase()
               : other_route_name
-          ]
+          ],
         );
         let direction_for_redirect = null;
         for (const other_route_direction of other_route_directions) {
@@ -135,10 +136,10 @@ function setHandlersOnLinks(route_name, direction, station_buttons) {
           !other_route_name.includes("s")
             ? other_route_name.toUpperCase()
             : other_route_name,
-          direction_for_redirect
+          direction_for_redirect,
         );
         const my_station_button = document.querySelector(
-          `[data-station-name="${active_station_name.replaceAll(" ", "_")}"]`
+          `[data-station-name="${active_station_name.replaceAll(" ", "_")}"]`,
         );
         my_station_button.click(); // Кликаем на нашу до этого выбранную остановку
         const newMinuteLink = findNewMinuteLink(cur_hour, cur_minutes); // Находим ту ссылку у которой значение совпадает
@@ -148,7 +149,7 @@ function setHandlersOnLinks(route_name, direction, station_buttons) {
           !other_route_name.includes("s")
             ? other_route_name.toUpperCase()
             : other_route_name,
-          direction_for_redirect
+          direction_for_redirect,
         ); // Обновляю маршрут на карте
         openChosenStationPopup(active_station_name);
       }
@@ -179,7 +180,7 @@ function findNewMinuteLink(hourValue, minutesValue) {
 function setHandlerOnSelect(
   select_direction,
   my_route_name,
-  offcanvas_body_div
+  offcanvas_body_div,
 ) {
   select_direction.addEventListener("change", (e) => {
     const new_direction = e.target.value.trim();
@@ -235,7 +236,7 @@ function setHandlersOnRedirectLinks(chosen_station) {
 
       createSelect(route_name, direction);
       const my_station_button = document.querySelector(
-        `[data-station-name="${chosen_station.replaceAll(" ", "_")}"]`
+        `[data-station-name="${chosen_station.replaceAll(" ", "_")}"]`,
       );
       my_station_button.click(); // Кликаем на нашу до этого выбранную остановку
       showCurrentRouteOnMap(route_name, direction);

@@ -81,7 +81,6 @@ function openSecondOffcanvas() {
     secondOffcanvas.show();
   }, 200);
 }
-// openSecondOffcanvas();
 
 function showStationTimetable(
   row_div,
@@ -124,12 +123,15 @@ function showStationTimetable(
   const current_minute = currentLocaleTime.split(":")[1];
 
   for (let i = 0; i < tables.length; i++) {
+    let table_index = null;
     if (i == 0) {
       weekDay = "working_days";
+      table_index = 0;
     } else if (i == 1) {
       weekDay = "holidays";
+      table_index = 1;
     }
-    const table = document.createElement("table");
+    let table = document.createElement("table");
     table.className = "table table-bordered mt-3 mb-0 time-table custom-table";
     let rows = "";
     for (const hour of Object.keys(largestTable)) {
@@ -234,7 +236,7 @@ function showStationTimetable(
               : "hide"
         } my-0 table-collapse">
           <!-- ВНУТРЕННЯЯ таблица с твоими строками -->
-          <table class="table table-bordered time-table custom-table">
+          <table class="table table-bordered time-table custom-table" data-table-index="${table_index}">
             <tbody>
               ${rows}
             </tbody>
@@ -382,7 +384,7 @@ function createSchedule(my_route_name, my_direction, offcanvas_body_div) {
             type="button"
             class="list-group-item list-group-item-action ${state} station-button"
             aria-current="true"
-            style="height: auto; font-size: 15px"
+            style="min-height: 45px; font-size: 15px; line-height: 1.2; padding: 10px;"
             data-station-name=${station_name.replaceAll(" ", "_")}
           >
             <strong class="me-2"></strong>${station_name}</button>`;
