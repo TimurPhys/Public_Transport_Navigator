@@ -6,6 +6,7 @@ import { showMarkersRoute } from "./handle_marker_click.js";
 import { stations, buses, minibuses } from "../routes/routes.js";
 import { getStationIcon } from "./style/markers.js";
 import { mapType, translations } from "../../json/parse_json.js";
+import { removeCurrentRouteFromMap } from "../sidebar/show_schedule.js";
 
 const map = L.map("map").setView([56.49, 21.02], 15);
 
@@ -59,7 +60,7 @@ function updateMap(vehicles) {
 
       if (
         !totalState.map_vehicles.find(
-          (map_vehicle) => map_vehicle["number"] === vehicle["number"]
+          (map_vehicle) => map_vehicle["number"] === vehicle["number"],
         )
       ) {
         const settings = vehicle_init(vehicle);
@@ -78,11 +79,11 @@ function updateMap(vehicles) {
           vehicle["marker"].addTo(map); // Добавляем маркер на карте
           vehicle["marker"].bindPopup(`
                                 <b>${translations["number"]}: ${
-            vehicle["number"]
-          }</b><br>
+                                  vehicle["number"]
+                                }</b><br>
                                 ${translations["type"]}: ${
-            translations[`${settings[`type`]}`]
-          }<br>
+                                  translations[`${settings[`type`]}`]
+                                }<br>
                                 ${translations["route"]}: ${vehicle["route"]}
                             `); // Добавляем всплывающее окно
           vehicle["marker"].on("click", () => {
@@ -91,12 +92,23 @@ function updateMap(vehicles) {
             routeState.latlng = vehicle["marker"].getLatLng();
             // Привязываю обработчик нажатий
             showMarkersRoute(routeState, totalState);
-            showPanel(map, vehicle, null);
+            const hide_route_div = document.querySelector("div.hide-route"); // Достаю кнопку из div
+            if (window.innerWidth >= 990) {
+              showPanel(map, vehicle, null);
+            } else {
+              hide_route_div.classList.remove("d-none");
+              const hide_route_button = hide_route_div.querySelector("button");
+              hide_route_button.addEventListener("click", () => {
+                removeCurrentRouteFromMap(routeState);
+                hide_route_div.classList.add("d-none");
+                map.closePopup();
+              });
+            }
           });
         }
       } else {
         const vehicle_to_update = totalState.map_vehicles.find(
-          (map_vehicle) => map_vehicle["number"] === vehicle["number"]
+          (map_vehicle) => map_vehicle["number"] === vehicle["number"],
         );
         vehicle_to_update["marker"].setLatLng(latlng);
       }

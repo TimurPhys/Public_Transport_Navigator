@@ -71,7 +71,7 @@ function removeCurrentRouteFromMap(routeState) {
     routeState,
     totalState.map_vehicles,
     "route_name",
-    true
+    true,
   );
 }
 
@@ -88,7 +88,7 @@ function showStationTimetable(
   direction,
   route_name,
   station_name,
-  station_buttons
+  station_buttons,
 ) {
   let tables_html = "";
   const tables =
@@ -100,7 +100,7 @@ function showStationTimetable(
     if (tables.length > 1) {
       maxHoursAmount = Math.max(
         Object.keys(tables[0]).length,
-        Object.keys(tables[1]).length
+        Object.keys(tables[1]).length,
       );
       for (const table of tables) {
         if (Object.keys(table).length === maxHoursAmount) {
@@ -225,14 +225,14 @@ function showStationTimetable(
       table.outerHTML +
       `<!-- Collapse должен быть на DIV -->
         <div id="tableBody-${weekDay}" data-week-day="${weekDay}" class="collapse ${
-        weekDay === "working_days"
-          ? schedule_tables.working_days
-            ? "show"
-            : "hide"
-          : schedule_tables.holidays
-          ? "show"
-          : "hide"
-      } my-0 table-collapse">
+          weekDay === "working_days"
+            ? schedule_tables.working_days
+              ? "show"
+              : "hide"
+            : schedule_tables.holidays
+              ? "show"
+              : "hide"
+        } my-0 table-collapse">
           <!-- ВНУТРЕННЯЯ таблица с твоими строками -->
           <table class="table table-bordered time-table custom-table">
             <tbody>
@@ -346,13 +346,13 @@ function createSelect(my_route_name, my_direction) {
         style="width: auto; font-size: 18px"
         >${my_route_name}</span>
         ${select_direction.outerHTML}
-    </div>`
+    </div>`,
   );
   secondOffcanvasDiv.insertAdjacentHTML("afterbegin", header);
   secondOffcanvasDiv.appendChild(offcanvas_body_div);
 
   const added_select_direction = document.querySelector(
-    "select.direction-select"
+    "select.direction-select",
   );
   added_select_direction.value = my_direction;
   setHandlerOnSelect(added_select_direction, my_route_name, offcanvas_body_div);
@@ -371,7 +371,7 @@ function createSchedule(my_route_name, my_direction, offcanvas_body_div) {
   let i = 0;
   let state = "";
   for (const station_name of Object.keys(
-    time_tables[my_route_name][my_direction]["time_tables"]
+    time_tables[my_route_name][my_direction]["time_tables"],
   )) {
     if (i === 0) {
       state = "active";
@@ -407,7 +407,7 @@ function createSchedule(my_route_name, my_direction, offcanvas_body_div) {
     my_direction,
     my_route_name,
     station_buttons[0].textContent.trim(),
-    station_buttons
+    station_buttons,
   );
 }
 

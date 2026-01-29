@@ -57,7 +57,7 @@ function showOnlyChosenTransport(
   routeState,
   all_vehicles = [],
   filter_after_what = "number",
-  showAll = false
+  showAll = false,
 ) {
   let chosenTransportsMarkers = null;
   if (filter_after_what === "number") {
@@ -99,14 +99,14 @@ function showMarkersRoute(
   totalState,
   direction = getCorrectTrajectory(routeState),
   filter_after_what = "number",
-  direction_option_already_correct = false
+  direction_option_already_correct = false,
 ) {
   deletePolyline(routeState);
   deleteArrows(routeState);
   showOnlyChosenTransport(
     routeState,
     totalState.map_vehicles,
-    filter_after_what
+    filter_after_what,
   );
   const route = routeState.currentRoute;
 
@@ -122,10 +122,10 @@ function showMarkersRoute(
   }
 
   routeState.currentPolyline = createPolyline(
-    new_routes[route][direction_option]["trajectory"]
+    new_routes[route][direction_option]["trajectory"],
   ).addTo(map);
   routeState.currentArrows = createArrowsOnPolyline(
-    routeState.currentPolyline
+    routeState.currentPolyline,
   ).addTo(map);
 
   map.fitBounds(routeState.currentPolyline.getBounds());
