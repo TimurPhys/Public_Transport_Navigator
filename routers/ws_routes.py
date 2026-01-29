@@ -7,7 +7,7 @@ from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
-from ..config import latest_data, connected_clients
+from config import latest_data, connected_clients
 
 @router.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):

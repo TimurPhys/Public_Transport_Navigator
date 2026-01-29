@@ -1,13 +1,14 @@
 from fastapi import Request
-from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi import APIRouter
 import json
+import os
 from pathlib import Path
 
 router = APIRouter()
 
-templates = Jinja2Templates(directory="app/templates")
+templates = Jinja2Templates(directory="templates")
 
 @router.get("/")
 async def get_html(request: Request):
@@ -33,10 +34,18 @@ async def settings(request: Request):
     response.set_cookie("map_type", map_type)
     return response
 
-@router.get("/manifest.json", response_class=FileResponse)
+@router.get("/manifest.json")
 async def get_manifest():
-    return "app/manifest.json"
+    file_path = "manifest.json"
 
-@router.get("/sw.js", response_class=FileResponse)
+    if os.path.exists(file_path):
+        return FileResponse(file_path, media_type='application/json')
+    return {"error": "File manifest.js not found"}
+
+@router.get("/sw.js")
 async def get_service_worker():
-    return "/app/static/js/pwa/sw.js"
+    file_path = "static/js/pwa/sw.js"
+
+    if os.path.exists(file_path):
+        return FileResponse(file_path, media_type='application/javascript')
+    return {"error": "File sw.js not found"}

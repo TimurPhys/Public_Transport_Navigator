@@ -1,7 +1,7 @@
 import asyncio
 import json
 import logging
-from ..services.site_parser import parse_website
+from services.site_parser import parse_website
 import time
 
 logger = logging.getLogger(__name__)

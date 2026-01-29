@@ -2,9 +2,9 @@ from fastapi import FastAPI
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
-from .utils.data_poller import data_poller
-from .routers import views, ws_routes
-from .config import latest_data, connected_clients
+from utils.data_poller import data_poller
+from routers import views, ws_routes
+from config import latest_data, connected_clients
 import asyncio
 import logging
 
@@ -20,7 +20,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Real Time Transport Tracker", lifespan=lifespan)
 
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 app.include_router(views.router)
 app.include_router(ws_routes.router)
