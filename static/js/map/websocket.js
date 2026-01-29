@@ -5,13 +5,13 @@ let ws = null;
 let reconnectTimeout = null;
 
 const connection_info_block = document.querySelectorAll(
-  ".connection-info-block div"
+  ".connection-info-block div",
 );
 const connection_state = connection_info_block[0].querySelector("span");
 const transport_count = connection_info_block[1].querySelector("span");
 
 const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-const wsUrl = `ws://${window.location.host}/ws`;
+const wsUrl = `${protocol}//${window.location.host}/ws`;
 
 ws = new WebSocket(wsUrl);
 
