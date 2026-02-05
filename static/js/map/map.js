@@ -8,14 +8,19 @@ import { getStationIcon } from "./style/markers.js";
 import { mapType, translations } from "../../json/parse_json.js";
 import { removeCurrentRouteFromMap } from "../sidebar/show_schedule.js";
 
-const map = L.map("map").setView([56.49, 21.02], 15);
+import {
+  TransportMap,
+  TransportRoute,
+  TransportStation,
+  TransportMarker,
+} from "./models.js";
+
+const map = new TransportMap("map", [56.49, 21.02], mapType);
+// const map = L.map("map").setView([56.49, 21.02], 15);
 
 const transport_quantity = document
   .querySelectorAll(".connection-info-block div")[1]
   .querySelector("span");
-
-const tiles = createLayers()[`${mapType}`];
-tiles.addTo(map);
 
 const routeState = {
   currentPolyline: null,
@@ -30,97 +35,41 @@ const totalState = {
   map_stations: [],
 };
 
-function vehicle_init(vehicle) {
-  let type = null;
-  let icon = null;
-  if (buses.includes(vehicle["route"])) {
-    type = "bus";
-    icon = createCustomIcon("bus", vehicle["route"], vehicle["azimuth"]);
-  } else if (minibuses.includes(vehicle["route"])) {
-    type = "minibus";
-    icon = createCustomIcon("minibus", vehicle["route"], vehicle["azimuth"]);
-  } else {
-    type = "tram";
-    icon = createCustomIcon("tram", vehicle["route"], vehicle["azimuth"]);
-  }
-  return {
-    type: type,
-    icon: icon,
-  };
-}
-let currentIds = new Set();
-
 function updateMap(vehicles) {
   transport_quantity.textContent = vehicles.length;
 
-  // Обновляем маркеры
+  // 1. Создаем Set локально при каждом обновлении
+  const uniqueTransportMarkers = new Set();
+
   vehicles.forEach((vehicle) => {
-    if (vehicle["route"] !== "") {
-      const latlng = [vehicle["long"], vehicle["lat"]];
+    const vehicle_data = {
+      transport_id: vehicle["route"],
+      transport_number: vehicle["number"],
+      coords: [vehicle["long"], vehicle["lat"]],
+      azimuth: vehicle["azimuth"],
+    };
+    uniqueTransportMarkers.add(vehicle["number"]);
 
-      if (
-        !totalState.map_vehicles.find(
-          (map_vehicle) => map_vehicle["number"] === vehicle["number"],
-        )
-      ) {
-        const settings = vehicle_init(vehicle);
-        const marker = L.marker(latlng, {
-          title: `Транспорт ${vehicle["route"]}`,
-          icon: settings["icon"],
-          zIndexOffset: 900,
-        });
-        vehicle["type"] = settings[`type`];
-        vehicle["marker"] = marker;
-
-        if (allowed_transports.includes(settings["type"])) {
-          // Рисую
-          currentIds.add(vehicle["number"]);
-          totalState.map_vehicles.push(vehicle); // Добавляю в массив
-          vehicle["marker"].addTo(map); // Добавляем маркер на карте
-          vehicle["marker"].bindPopup(`
-                                <b>${translations["number"]}: ${
-                                  vehicle["number"]
-                                }</b><br>
-                                ${translations["type"]}: ${
-                                  translations[`${settings[`type`]}`]
-                                }<br>
-                                ${translations["route"]}: ${vehicle["route"]}
-                            `); // Добавляем всплывающее окно
-          vehicle["marker"].on("click", () => {
-            routeState.currentRoute = vehicle["route"];
-            routeState.currentNumber = vehicle["number"];
-            routeState.latlng = vehicle["marker"].getLatLng();
-            // Привязываю обработчик нажатий
-            showMarkersRoute(routeState, totalState);
-            const hide_route_div = document.querySelector("div.hide-route"); // Достаю кнопку из div
-            if (window.innerWidth >= 990) {
-              showPanel(map, vehicle, null);
-            } else {
-              hide_route_div.classList.remove("d-none");
-              const hide_route_button = hide_route_div.querySelector("button");
-              hide_route_button.addEventListener("click", () => {
-                removeCurrentRouteFromMap(routeState);
-                hide_route_div.classList.add("d-none");
-                map.closePopup();
-              });
-            }
-          });
-        }
-      } else {
-        const vehicle_to_update = totalState.map_vehicles.find(
-          (map_vehicle) => map_vehicle["number"] === vehicle["number"],
-        );
-        vehicle_to_update["marker"].setLatLng(latlng);
-      }
+    // Если маркера нет на карте, то добавляем его
+    if (!map.isMarkerOnMap(vehicle_data.transport_number)) {
+      const vehicleObject = new TransportMarker(vehicle_data);
+      map.displayMarker(vehicleObject);
+    }
+    // Если маркер уже на карте, то просто меняем его состояние
+    else {
+      const existingVehicle = map.getMarkerByNumber(
+        vehicle_data.transport_number,
+      );
+      existingVehicle.updateMarkerPosition(vehicle_data);
     }
   });
-  // Удаляем старые маркеры
-  for (let i = totalState.map_vehicles.length - 1; i >= 0; i--) {
-    const map_vehicle = totalState.map_vehicles[i];
 
-    if (!currentIds.has(map_vehicle["number"])) {
-      map.removeLayer(map_vehicle["marker"]);
-      totalState.map_vehicles.splice(i, 1); // Удаляем текущий элемент
+  // 2. Удаляем те маркеры, которых нет в свежем списке uniqueTransportMarkers
+  // Итерируемся по всем маркерам, которые СЕЙЧАС хранятся в объекте карты
+  for (const transport_number of map.getMarkers().keys()) {
+    if (!uniqueTransportMarkers.has(transport_number)) {
+      console.log("Удаляем маркер");
+      map.removeMarker(transport_number);
     }
   }
 }
