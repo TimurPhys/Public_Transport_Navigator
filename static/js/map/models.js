@@ -32,7 +32,11 @@ class TransportMap {
     this.transportMarkers.set(markerObject.transport_number, markerObject);
     markerObject.marker.addTo(this.map);
   }
-  // Показывает
+  // Показывает остановку
+  displayStationMarker(stationObject) {
+    this.stationMarkers.set(stationObject.coords, stationObject);
+    stationObject.marker.addTo(this.map);
+  }
 
   // Убираю маркер с карты по номеру транспортного средства
   // (номер транспортного средства = индентификатор маркера этого транспорта на карте)
@@ -42,6 +46,14 @@ class TransportMap {
       this.map.removeLayer(marker.marker);
       marker.deleteMarker();
       this.transportMarkers.delete(markerId);
+    }
+  }
+  removeStationMarker(stationId) {
+    if (this.stationMarkers.has(stationId)) {
+      const marker = this.stationMarkers.get(stationId);
+      this.map.removeLayer(marker.marker);
+      marker.deleteMarker();
+      this.stationMarkers.delete(stationId);
     }
   }
 
@@ -144,7 +156,9 @@ class TransportStation {
     this.name = name;
     this.coords = coords;
     this.trans_attend = trans_attend;
-    this.station = null;
+    this.marker = null;
+
+    this.createStation();
   }
 
   // Создает объект маркера станции
@@ -153,7 +167,13 @@ class TransportStation {
       icon: getStationIcon("stationIcon", 0.8),
       zIndexOffset: 900,
     });
-    this.station = station_marker;
+    this.marker = station_marker;
+  }
+
+  deleteStation() {
+    this.marker.off();
+    this.marker = null;
+    console.log(`Маркер остановки ${this.name} уничтожен`);
   }
 }
 
