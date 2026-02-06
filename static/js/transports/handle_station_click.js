@@ -3,7 +3,7 @@ import { routeState, totalState, openChosenStationPopup } from "../map/map.js";
 import {
   showMarkersRoute,
   getDirectionFromRouteOption,
-} from "../map/handle_marker_click.js";
+} from "../map/handleMarkerClick.js";
 import { getNearestTimes } from "./get_nearest_time.js";
 import {
   openSecondOffcanvas,
@@ -45,7 +45,7 @@ function setHandlersOnRoutes(route_links, chosen_station) {
         totalState,
         myKeyDirection,
         "route_name",
-        true
+        true,
       );
       navbarCollapse.hide();
       openChosenStationPopup(chosen_station.name);
@@ -65,7 +65,7 @@ function handleClickOnOtherRouteMarkers(routeState, myKeyDirection) {
       ].find(
         (station) =>
           station.coords.lat === marker.getLatLng().lat &&
-          station.coords.lng === marker.getLatLng().lng
+          station.coords.lng === marker.getLatLng().lng,
       );
       showPanel(map, null, myStationObject);
       const direction = getDirectionFromRouteOption(routeState, myKeyDirection);
@@ -79,13 +79,13 @@ function showAdditionalStationInfo(chosen_route, direction, chosen_station) {
   const added_elements = document.querySelectorAll("li.add-info");
   if (added_elements) {
     Array.from(added_elements).forEach((added_element) =>
-      added_element.remove()
+      added_element.remove(),
     );
   }
   const nearest_times = getNearestTimes(
     chosen_route,
     direction,
-    chosen_station.name
+    chosen_station.name,
   );
 
   let html = `
@@ -107,7 +107,7 @@ function showAdditionalStationInfo(chosen_route, direction, chosen_station) {
 
 function setHandlerOnRedirectLink(route_name, direction, station) {
   const redirect_link = document.querySelector(
-    "li.add-info a.redirect_on_page"
+    "li.add-info a.redirect_on_page",
   );
   redirect_link.addEventListener("click", function () {
     console.log(route_name);
@@ -117,7 +117,7 @@ function setHandlerOnRedirectLink(route_name, direction, station) {
     openSecondOffcanvas();
     createSelect(route_name, direction);
     const my_station_button = document.querySelector(
-      `[data-station-name="${station["name"].replaceAll(" ", "_")}"]`
+      `[data-station-name="${station["name"].replaceAll(" ", "_")}"]`,
     );
     my_station_button.click(); // Кликаем на нашу до этого выбранную остановку
     processCloseButton();

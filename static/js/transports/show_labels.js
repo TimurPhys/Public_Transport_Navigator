@@ -4,7 +4,7 @@ import {
   deletePolyline,
   deleteArrows,
   clearMarkers,
-} from "../map/handle_marker_click.js";
+} from "../map/handleMarkerClick.js";
 import { setHandlersOnRoutes } from "./handle_station_click.js";
 import { sortRouteNames } from "../sidebar/list_routes.js";
 import { translations } from "../../json/parse_json.js";
@@ -17,7 +17,7 @@ const image_from_type = {
 
 const card = document.querySelector(".transports-info-window");
 const openOffCanvasButton = document.querySelector(
-  "button.btn-openFirstOffcanvas"
+  "button.btn-openFirstOffcanvas",
 );
 
 function showPanel(map, vehicle, station) {
@@ -92,11 +92,11 @@ function createListGroup(vehicle, station) {
     }
     let inner_html = `
   <li class="list-group-item">${translations["station-name"]}: <b>${
-      station.name
-    }</b></li>
+    station.name
+  }</b></li>
   <li class="list-group-item">${translations["routes"]}: ${route_links.join(
-      ""
-    )}</li>
+    "",
+  )}</li>
     `;
     list_group.insertAdjacentHTML("beforeend", inner_html);
     return list_group;

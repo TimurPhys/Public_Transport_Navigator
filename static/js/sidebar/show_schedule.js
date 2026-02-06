@@ -15,7 +15,7 @@ import {
   clearMarkers,
   showOnlyChosenTransport,
   getCorrectRouteOption,
-} from "../map/handle_marker_click.js";
+} from "../map/handleMarkerClick.js";
 import { new_routes } from "../routes/routes.js";
 import { sortRouteNames } from "./list_routes.js";
 import { translations } from "../../json/parse_json.js";

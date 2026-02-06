@@ -12,7 +12,7 @@ import { time_tables } from "../../json/parse_json.js";
 import { getStopTimes } from "./get_stop_times.js";
 import { showCurrentRouteOnMap, processCloseButton } from "./show_schedule.js";
 import { new_routes } from "../routes/routes.js";
-import { getDirectionFromRouteOption } from "../map/handle_marker_click.js";
+import { getDirectionFromRouteOption } from "../map/handleMarkerClick.js";
 
 const schedule_tables = {
   working_days: true,

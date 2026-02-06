@@ -1,8 +1,8 @@
-import createLayers from "./style/map_styles.js";
+import createLayers from "./style/map.styles.js";
 import { createCustomIcon } from "./style/markers.js";
-import { allowed_transports } from "../transports/filter_transport.js";
+import markersVisility from "./markers.visibility.js";
 import { showPanel } from "../transports/show_labels.js";
-import { showMarkersRoute } from "./handle_marker_click.js";
+import { showMarkersRoute } from "./handleMarkerClick.js";
 import { stations, buses, minibuses } from "../routes/routes.js";
 import { getStationIcon } from "./style/markers.js";
 import { mapType, translations } from "../../json/parse_json.js";
@@ -51,37 +51,41 @@ function updateMap(vehicles) {
     uniqueTransportMarkers.add(vehicle["number"]);
 
     // Если маркера нет на карте, то добавляем его
-    if (!map.isMarkerOnMap(vehicle_data.transport_number)) {
+    if (!map.isTransportMarkerOnMap(vehicle_data.transport_number)) {
+      // console.log("Добавляем маркер транспорта");
       const vehicleObject = new TransportMarker(vehicle_data);
-      map.displayMarker(vehicleObject);
+      // Если можно показывать
+      if (markersVisility[vehicleObject.type] === true) {
+        map.displayTransportMarker(vehicleObject);
+      }
     }
     // Если маркер уже на карте, то просто меняем его состояние
     else {
-      const existingVehicle = map.getMarkerByNumber(
+      const existingVehicle = map.getTransportMarkerByNumber(
         vehicle_data.transport_number,
       );
-      existingVehicle.updateMarkerPosition(vehicle_data);
+      existingVehicle.updateTransportMarkerPosition(vehicle_data);
     }
   });
 
   // 2. Удаляем те маркеры, которых нет в свежем списке uniqueTransportMarkers
   // Итерируемся по всем маркерам, которые СЕЙЧАС хранятся в объекте карты
-  for (const transport_number of map.getMarkers().keys()) {
+  for (const transport_number of map.getTransportMarkers().keys()) {
     if (!uniqueTransportMarkers.has(transport_number)) {
-      console.log("Удаляем маркер");
-      map.removeMarker(transport_number);
+      map.removeTransportMarker(transport_number);
     }
   }
 }
 
 function refreshTransports() {
-  for (let i = totalState.map_vehicles.length - 1; i >= 0; i--) {
-    const map_vehicle = totalState.map_vehicles[i];
-    const transport_type = map_vehicle["type"];
-
-    if (!allowed_transports.includes(transport_type)) {
-      map.removeLayer(map_vehicle["marker"]);
-      totalState.map_vehicles.splice(i, 1); // Удаляем текущий элемент
+  console.log("Обновляем транспорт");
+  for (const transport_marker of map.getTransportMarkers().values()) {
+    // Если маркер транспорта сейчас отображается на карте
+    const transport_number = transport_marker.transport_number;
+    if (!markersVisility[transport_marker.type]) {
+      // Маркер уничтожен
+      map.removeTransportMarker(transport_number);
+      // Иначе добавляем транспорт обратно на карту
     }
   }
 }

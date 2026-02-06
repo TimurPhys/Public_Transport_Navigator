@@ -1,32 +1,17 @@
-import { createPolyline } from "./style/polyline_style.js";
-import createLayers from "./style/map_styles.js";
+import { createPolyline } from "./style/polyline.style.js";
+import createLayers from "./style/map.styles.js";
 import { createCustomIcon } from "./style/markers.js";
 import { buses, minibuses } from "../routes/routes.js";
 import { getStationIcon } from "./style/markers.js";
 import { translations } from "../../json/parse_json.js";
-
-// Класс пути транспорта
-class TransportRoute {
-  constructor(transport_id, route_direction, points) {
-    this.transport_id = transport_id;
-    this.route_direction = route_direction;
-    this.points = points;
-    this.polyline = null;
-  }
-  getPolyline() {
-    if (!this.polyline) {
-      this.polyline = createPolyline(this.points);
-    }
-    return this.polyline;
-  }
-}
 
 // Класс карты транспорта
 class TransportMap {
   constructor(containerId, center = [56.49, 21.02], map_type) {
     this.map = L.map(containerId).setView(center, 15);
     this.currentRoute = null; // Текующий отображаемый путь
-    this.markers = new Map();
+    this.transportMarkers = new Map();
+    this.stationMarkers = new Map();
     createLayers()[map_type].addTo(this.map); // Инициализация стилей карты
   }
 
@@ -42,40 +27,40 @@ class TransportMap {
 
     this.map.fitBounds(polyline.getBounds());
   }
-
-  // Показываю маркер на карте
-  displayMarker(markerObject) {
-    this.markers.set(markerObject.transport_number, markerObject);
+  // Показывает маркер трнаспорта на карте
+  displayTransportMarker(markerObject) {
+    this.transportMarkers.set(markerObject.transport_number, markerObject);
     markerObject.marker.addTo(this.map);
   }
+  // Показывает
 
   // Убираю маркер с карты по номеру транспортного средства
   // (номер транспортного средства = индентификатор маркера этого транспорта на карте)
-  removeMarker(markerId) {
-    if (this.markers.has(markerId)) {
-      const marker = this.markers.get(markerId);
-      this.map.removeLayer(marker);
+  removeTransportMarker(markerId) {
+    if (this.transportMarkers.has(markerId)) {
+      const marker = this.transportMarkers.get(markerId);
+      this.map.removeLayer(marker.marker);
       marker.deleteMarker();
-      this.markers.delete(markerId);
+      this.transportMarkers.delete(markerId);
     }
   }
 
-  isMarkerOnMap(markerId) {
-    if (this.markers.has(markerId)) {
+  isTransportMarkerOnMap(markerId) {
+    if (this.transportMarkers.has(markerId)) {
       return true;
     }
     return false;
   }
 
-  getMarkerByNumber(markerNumber) {
-    if (this.markers.has(markerNumber)) {
-      return this.markers.get(markerNumber);
+  getTransportMarkerByNumber(markerNumber) {
+    if (this.transportMarkers.has(markerNumber)) {
+      return this.transportMarkers.get(markerNumber);
     }
     return null;
   }
 
-  getMarkers() {
-    return this.markers;
+  getTransportMarkers() {
+    return this.transportMarkers;
   }
 
   // Убрать все маршруты с карты
@@ -134,7 +119,7 @@ class TransportMarker {
   }
 
   // Обновляет положение маркера на карте и его азимут (угол поворота)
-  updateMarkerPosition(new_metadata) {
+  updateTransportMarkerPosition(new_metadata) {
     this.marker.setLatLng(new_metadata.coords);
     this.marker.setIcon(
       createCustomIcon(this.type, this.transport_id, new_metadata.azimuth),
@@ -169,6 +154,22 @@ class TransportStation {
       zIndexOffset: 900,
     });
     this.station = station_marker;
+  }
+}
+
+// Класс пути транспорта
+class TransportRoute {
+  constructor(transport_id, route_direction, points) {
+    this.transport_id = transport_id;
+    this.route_direction = route_direction;
+    this.points = points;
+    this.polyline = null;
+  }
+  getPolyline() {
+    if (!this.polyline) {
+      this.polyline = createPolyline(this.points);
+    }
+    return this.polyline;
   }
 }
 
