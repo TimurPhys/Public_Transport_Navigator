@@ -1,12 +1,12 @@
 import { map, showStations } from "./map.js";
-import { getStationIcon } from "./style/markers.js";
+import { getStationIcon } from "../core/map.style/markers.js";
 import { new_routes } from "../../json/parse_json.js";
 import { getCorrectTrajectory } from "./correct_trajectory_choice.js";
 // import { checkboxes, show_stations_checkbox } from "./markers.visibility.js";
 import {
   createArrowsOnPolyline,
   createPolyline,
-} from "./style/polyline.style.js";
+} from "../core/map.style/polyline.style.js";
 import { navbarCollapse } from "../init.js";
 
 function deletePolyline(routeState) {

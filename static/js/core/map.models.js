@@ -1,9 +1,10 @@
-import { createPolyline } from "./style/polyline.style.js";
-import createLayers from "./style/map.styles.js";
-import { createCustomIcon } from "./style/markers.js";
+import { createPolyline } from "./map.style/polyline.style.js";
+import createLayers from "./map.style/map.styles.js";
+import { createCustomIcon } from "./map.style/markers.js";
 import { buses, minibuses } from "../routes/routes.js";
-import { getStationIcon } from "./style/markers.js";
+import { getStationIcon } from "./map.style/markers.js";
 import { translations } from "../../json/parse_json.js";
+import { transportEvent, stationEvent } from "./base.models.js";
 
 // Класс карты транспорта
 class TransportMap {
@@ -127,6 +128,14 @@ class TransportMarker {
               ${translations["type"]}: ${translations[this.type]}<br>
               ${translations["route"]}: ${this.transport_id}
           `);
+    marker.on("click", () => {
+      transportEvent.emit("transport:selected", {
+        type: this.type,
+        id: this.transport_id,
+        number:this.transport_number,
+      })
+    })
+
     this.marker = marker;
   }
 
@@ -167,6 +176,13 @@ class TransportStation {
       icon: getStationIcon("stationIcon", 0.8),
       zIndexOffset: 900,
     });
+    station_marker.on("click", () => {
+      stationEvent("station:selected", {
+        name: this.name,
+        coords: this.coords,
+        trans_attend: this.trans_attend
+      })
+    })
     this.marker = station_marker;
   }
 

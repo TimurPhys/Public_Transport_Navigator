@@ -51,8 +51,8 @@
 
     <div class="map-wrapper" style="position: relative">
       <div id="map" class="map-container"></div>
-      <div class="transports-info-window fade" style="display: none">
-        {% include "panel.html" %}
+      <div class="fade" id="transports-info-window">
+        <!-- {% include "panel.html" %} -->
       </div>
     </div>
 
@@ -75,6 +75,8 @@
       src="../static/js/map/correct_trajectory_choice.js"
       type="module"
     ></script>
+    <script src="../static/js/core/map.models.js" type="module"></script>
+    <script src="../static/js/core/base.models.js" type="module"></script>
     <script src="../static/js/map/map.js" type="module"></script>
     <script src="../static/js/map/websocket.js" type="module"></script>
     <script src="../static/js/map/handleMarkerClick.js" type="module"></script>
