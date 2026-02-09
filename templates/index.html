@@ -42,7 +42,8 @@
     <link rel="stylesheet" href="../static/css/libs/bootstrap.min.css" />
     <link rel="stylesheet" href="../static/css/navbar.css" />
     <link rel="stylesheet" href="../static/css/style.css" />
-    <link rel="stylesheet" href="../static/css/panel_style.css" />
+    <link rel="stylesheet" href="../static/css/components/transport_card.css" />
+    <link rel="stylesheet" href="../static/css/components/sidebar.css" />
   </head>
 
   <body>
@@ -62,7 +63,6 @@
     <script src="https://unpkg.com/leaflet-geometryutil"></script>
     <script src="https://cdn.jsdelivr.net/npm/leaflet-polylinedecorator@1.6.0/dist/leaflet.polylineDecorator.min.js"></script>
     <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
-    <script src="https://rawgit.com/bbecquet/Leaflet.RotatedMarker/master/leaflet.rotatedMarker.js"></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"
@@ -71,29 +71,28 @@
       referrerpolicy="no-referrer"
     ></script>
     <script src="../static/js/libs/bootstrap.min.js"></script>
-    <script
-      src="../static/js/map/correct_trajectory_choice.js"
-      type="module"
-    ></script>
     <script src="../static/js/core/map.models.js" type="module"></script>
     <script src="../static/js/core/base.models.js" type="module"></script>
     <script src="../static/js/map/map.js" type="module"></script>
     <script src="../static/js/map/websocket.js" type="module"></script>
-    <script src="../static/js/map/handleMarkerClick.js" type="module"></script>
     <script src="../static/js/map/markers.visibility.js" type="module"></script>
     <script
       src="../static/js/transports/get_nearest_time.js"
       type="module"
     ></script>
     <script
-      src="../static/js/transports/handle_station_click.js"
+      src="../static/js/components/desktop/transport.card.js"
+      type="module"
+    ></script>
+    <script
+      src="../static/js/components/desktop/list.sidebar.js"
       type="module"
     ></script>
     <script src="../static/js/init.js" type="module"></script>
-    <script src="../static/js/sidebar/list_routes.js" type="module"></script>
+    <!-- <script src="../static/js/sidebar/list_routes.js" type="module"></script> -->
     <script src="../static/js/routes/routes.js" type="module"></script>
     <script src="../static/json/parse_json.js" type="module"></script>
-    <script src="../static/js/sidebar/show_schedule.js" type="module"></script>
+    <!-- <script src="../static/js/sidebar/show_schedule.js" type="module"></script> -->
     <script src="../static/js/pwa/index.js"></script>
   </body>
 </html>

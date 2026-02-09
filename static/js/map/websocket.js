@@ -7,8 +7,8 @@ let reconnectTimeout = null;
 const connection_info_block = document.querySelectorAll(
   ".connection-info-block div",
 );
-const connection_state = connection_info_block[0].querySelector("span");
-const transport_count = connection_info_block[1].querySelector("span");
+// const connection_state = connection_info_block[0].querySelector("span");
+// const transport_count = connection_info_block[1].querySelector("span");
 
 const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
 const wsUrl = `${protocol}//${window.location.host}/ws`;
@@ -17,8 +17,8 @@ ws = new WebSocket(wsUrl);
 
 function connectWebSocket() {
   ws.onopen = () => {
-    connection_state.textContent = translations["connected"];
-    connection_state.style.color = "green";
+    // connection_state.textContent = translations["connected"];
+    // connection_state.style.color = "green";
   };
 
   ws.onmessage = (event) => {
@@ -33,8 +33,8 @@ function connectWebSocket() {
   };
 
   ws.onclose = () => {
-    connection_state.textContent = translations["disconnected"];
-    connection_state.style.color = "red";
+    // connection_state.textContent = translations["disconnected"];
+    // connection_state.style.color = "red";
     reconnect();
   };
 
@@ -47,8 +47,8 @@ function connectWebSocket() {
 function reconnect() {
   if (reconnectTimeout) clearTimeout(reconnectTimeout);
   reconnectTimeout = setTimeout(() => {
-    connection_state.textContent = `${translations["reconnection"]}...`;
-    connection_state.style.color = "orange";
+    // connection_state.textContent = `${translations["reconnection"]}...`;
+    // connection_state.style.color = "orange";
     connectWebSocket();
   }, 3000);
 }

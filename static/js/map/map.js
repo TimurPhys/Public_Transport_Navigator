@@ -2,7 +2,6 @@ import createLayers from "../core/map.style/map.styles.js";
 import { createCustomIcon } from "../core/map.style/markers.js";
 import markersVisility from "./markers.visibility.js";
 import { showPanel } from "../transports/show_labels.js";
-import { showMarkersRoute } from "./handleMarkerClick.js";
 import { stations, buses, minibuses } from "../routes/routes.js";
 import { getStationIcon } from "../core/map.style/markers.js";
 import { mapType, translations } from "../../json/parse_json.js";
@@ -13,14 +12,14 @@ import {
   TransportRoute,
   TransportStation,
   TransportMarker,
-} from "../core/map.models.js"
+} from "../core/map.models.js";
 
 const map = new TransportMap("map", [56.49, 21.02], mapType);
 // const map = L.map("map").setView([56.49, 21.02], 15);
 
-const transport_quantity = document
-  .querySelectorAll(".connection-info-block div")[1]
-  .querySelector("span");
+// const transport_quantity = document
+//   .querySelectorAll(".connection-info-block div")[1]
+//   .querySelector("span");
 
 const routeState = {
   currentPolyline: null,
@@ -36,7 +35,7 @@ const totalState = {
 };
 
 function updateMap(vehicles) {
-  transport_quantity.textContent = vehicles.length;
+  // transport_quantity.textContent = vehicles.length;
 
   // 1. Создаем Set локально при каждом обновлении
   const uniqueTransportMarkers = new Set();

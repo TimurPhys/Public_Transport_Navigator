@@ -132,9 +132,9 @@ class TransportMarker {
       transportEvent.emit("transport:selected", {
         type: this.type,
         id: this.transport_id,
-        number:this.transport_number,
-      })
-    })
+        number: this.transport_number,
+      });
+    });
 
     this.marker = marker;
   }
@@ -180,9 +180,9 @@ class TransportStation {
       stationEvent("station:selected", {
         name: this.name,
         coords: this.coords,
-        trans_attend: this.trans_attend
-      })
-    })
+        trans_attend: this.trans_attend,
+      });
+    });
     this.marker = station_marker;
   }
 

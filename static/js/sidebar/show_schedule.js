@@ -8,20 +8,12 @@ import {
   setHandlersOnRedirectLinks,
 } from "./handlers.js";
 import { routeState, totalState } from "../map/map.js";
-import {
-  showMarkersRoute,
-  deletePolyline,
-  deleteArrows,
-  clearMarkers,
-  showOnlyChosenTransport,
-  getCorrectRouteOption,
-} from "../map/handleMarkerClick.js";
 import { new_routes } from "../routes/routes.js";
-import { sortRouteNames } from "./list_routes.js";
+// import { sortRouteNames } from "./list_routes.js";
 import { translations } from "../../json/parse_json.js";
 
 const secondOffcanvasDiv = document.getElementById("secondOffcanvas");
-const firstOffcanvasDiv = document.getElementById("sidebarRoutes");
+const firstOffcanvasDiv = document.getElementById("offcanvas");
 const firstOffcanvas = new bootstrap.Offcanvas(firstOffcanvasDiv);
 const route_items = document.querySelectorAll("button.route-item");
 

@@ -1,12 +1,5 @@
 import { routeState, totalState } from "../map/map.js";
-import {
-  showOnlyChosenTransport,
-  deletePolyline,
-  deleteArrows,
-  clearMarkers,
-} from "../map/handleMarkerClick.js";
-import { setHandlersOnRoutes } from "./handle_station_click.js";
-import { sortRouteNames } from "../sidebar/list_routes.js";
+// import { sortRouteNames } from "../sidebar/list_routes.js";
 import { translations } from "../../json/parse_json.js";
 
 const image_from_type = {
