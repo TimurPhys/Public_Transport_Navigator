@@ -10,9 +10,10 @@ router = APIRouter()
 
 templates = Jinja2Templates(directory="templates")
 
+
 @router.get("/")
 async def get_html(request: Request):
-    language = request.cookies.get("language", "RU")
+    language = request.cookies.get("language", "LV")
 
     BASE_DIR = Path(__file__).resolve().parent.parent
     file_path = BASE_DIR / "static" / "json" / "translation" / f"{language}.json"
@@ -20,7 +21,11 @@ async def get_html(request: Request):
         translations = json.load(f)
 
     map_type = request.cookies.get("map_type", "standard")
-    return templates.TemplateResponse("index.html", {"request": request, "translations": translations, "map_type": map_type})
+    return templates.TemplateResponse(
+        "index.html",
+        {"request": request, "translations": translations, "map_type": map_type},
+    )
+
 
 @router.post("/settings")
 async def settings(request: Request):
@@ -34,18 +39,20 @@ async def settings(request: Request):
     response.set_cookie("map_type", map_type)
     return response
 
+
 @router.get("/manifest.json")
 async def get_manifest():
     file_path = "manifest.json"
 
     if os.path.exists(file_path):
-        return FileResponse(file_path, media_type='application/json')
+        return FileResponse(file_path, media_type="application/json")
     return {"error": "File manifest.js not found"}
+
 
 @router.get("/sw.js")
 async def get_service_worker():
     file_path = "static/js/pwa/sw.js"
 
     if os.path.exists(file_path):
-        return FileResponse(file_path, media_type='application/javascript')
+        return FileResponse(file_path, media_type="application/javascript")
     return {"error": "File sw.js not found"}
