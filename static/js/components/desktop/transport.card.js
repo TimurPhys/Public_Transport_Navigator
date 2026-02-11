@@ -22,7 +22,7 @@ class TransportCardComponent extends BaseComponent {
                 <img style="width: 300px; height: 225px;" src="" alt="Transport image">
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item route"><span style="font-weight:600;">${translations["route"]}:</span> ${id}d</li>
+                <li class="list-group-item route"><span style="font-weight:600;">${translations["route"]}:</span> ${id}</li>
                 <li class="list-group-item number"><span style="font-weight:600;">${translations["number"]}:</span> ${number}</li>
              </ul>
         </div>
@@ -45,7 +45,12 @@ class TransportCardComponent extends BaseComponent {
   bindEvents() {
     const closeBtn = this.container.querySelector(".close-button");
     if (closeBtn) {
-      closeBtn.addEventListener("click", () => this.hide());
+      closeBtn.addEventListener("click", () => {
+        this.hide();
+        if (this.data.marker_instance) {
+          this.data.marker_instance.closePopup();
+        }
+      });
     }
   }
 

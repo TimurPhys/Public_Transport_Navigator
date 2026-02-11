@@ -1,6 +1,8 @@
 import { BaseComponent } from "../../core/base.models.js";
 import { offCanvas } from "../../core/base.models.js";
 import { getTransportListTemplate } from "./templates/list.template.js";
+import { translations } from "../../../json/parse_json.js";
+import { time_tables } from "../../../json/parse_json.js";
 
 class SidebarTransportListComponent extends BaseComponent {
   constructor(containerId) {
@@ -8,7 +10,9 @@ class SidebarTransportListComponent extends BaseComponent {
     this.routes_data = this.getRoutesData();
 
     offCanvas.addEventListener("shown.bs.offcanvas", () => {
-      this.render();
+      if (this.container.innerHTML == "") {
+        this.render();
+      }
     });
   }
 
@@ -28,14 +32,31 @@ class SidebarTransportListComponent extends BaseComponent {
     this.bindEvents();
   }
 
-  updateConnectionData(data) {
-    const { state, vehicle_quantity } = data;
+  updateConnectionState(new_state) {
     // Обновляем статус подключения
     const connection_status_span = document.getElementById("connection-status");
-    connection_status_span.textContent = state;
+    if (connection_status_span) {
+      switch (new_state) {
+        case "connected":
+          connection_status_span.style.color = "green";
+          break;
+        case "no_answer" || "disconnected":
+          connection_status_span.style.color = "red";
+          break;
+        case "orange":
+          connection_status_span.style.color = "orange";
+          break;
+      }
+      connection_status_span.textContent = translations[new_state];
+    }
+  }
+
+  updateVehiclesQuantity(new_quantity) {
     // Обновляем количество транспорта
-    const vehicles_quantity_span = document.getElementById("connection-status");
-    vehicles_quantity_span.textContent = vehicle_quantity;
+    const vehicles_quantity_span = document.getElementById("vehicleCount");
+    if (vehicles_quantity_span) {
+      vehicles_quantity_span.textContent = String(new_quantity);
+    }
   }
 
   bindEvents() {}

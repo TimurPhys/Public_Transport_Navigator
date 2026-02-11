@@ -6,6 +6,7 @@ import { stations, buses, minibuses } from "../routes/routes.js";
 import { getStationIcon } from "../core/map.style/markers.js";
 import { mapType, translations } from "../../json/parse_json.js";
 import { removeCurrentRouteFromMap } from "../sidebar/show_schedule.js";
+import { transportListComponent } from "../components/desktop/list.sidebar.js";
 
 import {
   TransportMap,
@@ -15,11 +16,6 @@ import {
 } from "../core/map.models.js";
 
 const map = new TransportMap("map", [56.49, 21.02], mapType);
-// const map = L.map("map").setView([56.49, 21.02], 15);
-
-// const transport_quantity = document
-//   .querySelectorAll(".connection-info-block div")[1]
-//   .querySelector("span");
 
 const routeState = {
   currentPolyline: null,

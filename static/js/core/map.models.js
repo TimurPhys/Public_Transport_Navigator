@@ -133,6 +133,7 @@ class TransportMarker {
         type: this.type,
         id: this.transport_id,
         number: this.transport_number,
+        marker_instance: this.marker,
       });
     });
 

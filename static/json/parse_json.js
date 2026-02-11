@@ -20,7 +20,7 @@ let time_tables = null;
 let new_routes = null;
 let stations = null;
 
-await parse_json("/static/json/routes_time_tables.json").then((data) => {
+await parse_json("/static/json/new_time_tables.json").then((data) => {
   if (data) {
     time_tables = data;
     console.log("Данные загружены!");
@@ -37,6 +37,19 @@ await parse_json("/static/json/stations.json").then((data) => {
   }
 });
 
+// let new_time_tables = {};
+// for (const route_key of Object.keys(time_tables)) {
+//   new_time_tables[route_key] = {};
+//   for (const direction_key of Object.keys(time_tables[route_key])) {
+//     new_time_tables[route_key][direction_key] = {};
+//     for (const station_key of Object.keys(
+//       time_tables[route_key][direction_key],
+//     )) {
+//       new_time_tables[route_key][direction_key][station_key] =
+//         time_tables[route_key][direction_key][station_key][0];
+//     }
+//   }
+// }
 console.log(time_tables);
 console.log(new_routes);
 console.log(stations);
