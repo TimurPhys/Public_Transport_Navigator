@@ -30,6 +30,23 @@ function generateRouteButtonsTemplates() {
   return html_templates;
 }
 
+function generateTypeButtonsTemplates(type, active) {
+  return `
+    <li class="nav-item" role="presentation">
+        <button
+          class="nav-link ${active ? "active" : ""}"
+          id="pills-${type}-tab"
+          data-bs-toggle="pill"
+          data-bs-target="#pills-${type}"
+          type="button"
+          role="tab"
+        >
+          ${translations[type]}
+        </button>
+      </li>
+  `;
+}
+
 export const getTransportListTemplate = () => {
   const buttons_templates = generateRouteButtonsTemplates();
   return `
@@ -53,42 +70,9 @@ export const getTransportListTemplate = () => {
   <div class="offcanvas-body d-flex flex-column overflow-hidden">
     <!-- Переключатели типов транспорта -->
     <ul class="nav nav-pills nav-fill mb-3" id="transport-pills-tab" role="tablist">
-      <li class="nav-item" role="presentation">
-        <button
-          class="nav-link active"
-          id="pills-bus-tab"
-          data-bs-toggle="pill"
-          data-bs-target="#pills-bus"
-          type="button"
-          role="tab"
-        >
-          ${translations["bus"]}
-        </button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button
-          class="nav-link"
-          id="pills-minibus-tab"
-          data-bs-toggle="pill"
-          data-bs-target="#pills-minibus"
-          type="button"
-          role="tab"
-        >
-          ${translations["minibus"]}
-        </button>
-      </li>
-      <li class="nav-item" role="presentation">
-        <button
-          class="nav-link"
-          id="pills-tram-tab"
-          data-bs-toggle="pill"
-          data-bs-target="#pills-tram"
-          type="button"
-          role="tab"
-        >
-          ${translations["tram"]}
-        </button>
-      </li>
+      ${generateTypeButtonsTemplates("bus", true)}
+      ${generateTypeButtonsTemplates("minibus", false)}
+      ${generateTypeButtonsTemplates("tram", false)}
     </ul>
 
     <!-- Фильтр по номеру/названию -->
