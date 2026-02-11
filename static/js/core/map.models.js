@@ -1,7 +1,7 @@
 import { createPolyline } from "./map.style/polyline.style.js";
 import createLayers from "./map.style/map.styles.js";
 import { createCustomIcon } from "./map.style/markers.js";
-import { buses, minibuses } from "../routes/routes.js";
+import { transportType_to_id } from "../routes/routes.js";
 import { getStationIcon } from "./map.style/markers.js";
 import { translations } from "../../json/parse_json.js";
 import { transportEvent, stationEvent } from "./base.models.js";
@@ -100,21 +100,18 @@ class TransportMarker {
     this.coords = metadata.coords;
     this.marker = null;
 
-    this.getTransportType(this.transport_id);
+    this.getTransportType();
     this.createMarker();
   }
 
   // Получает тип транспорта (автобус, трамвай, маршрутка)
-  getTransportType(transport_id) {
-    let type = null;
-    if (buses.includes(transport_id)) {
-      type = "bus";
-    } else if (minibuses.includes(transport_id)) {
-      type = "minibus";
-    } else {
-      type = "tram";
+  getTransportType() {
+    for (const transport_type of Object.keys(transportType_to_id)) {
+      if (transportType_to_id[transport_type].includes(this.transport_id)) {
+        this.type = transport_type;
+        break;
+      }
     }
-    this.type = type;
   }
 
   // Создает объект маркера, но не помещает ее на карту

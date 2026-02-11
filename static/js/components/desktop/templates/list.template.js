@@ -1,6 +1,37 @@
 import { translations } from "../../../../json/parse_json.js";
+import { transportType_to_id } from "../../../routes/routes.js";
+import { time_tables } from "../../../../json/parse_json.js";
 
-export const getTransportListTemplate = (data) => {
+function generateRouteButtonsTemplates() {
+  const html_templates = {
+    tram: "",
+    bus: "",
+    minibus: "",
+  };
+  for (const transport_type of Object.keys(transportType_to_id)) {
+    for (const id of transportType_to_id[transport_type]) {
+      const direction = Object.keys(time_tables[id])[0];
+      html_templates[transport_type] += `
+        <button class="list-group-item list-group-item-action d-flex route-item" 
+                data-id="${id}" data-default-direction="${direction}">
+                <div class="route-id-container me-2">
+                    <span class="badge bg-primary route-badge">${id}</span>
+                </div>
+            <div class="flex-grow-1">
+                <div class="fw-semibold text-truncate">
+                    ${direction}
+                </div>
+            </div>
+            <span class="ms-2 text-muted small">&rsaquo;</span>
+        </button>
+      `;
+    }
+  }
+  return html_templates;
+}
+
+export const getTransportListTemplate = () => {
+  const buttons_templates = generateRouteButtonsTemplates();
   return `
 <div class="offcanvas-header border-bottom">
     <div>
@@ -19,9 +50,9 @@ export const getTransportListTemplate = (data) => {
     ></button>
   </div>
 
-  <div class="offcanvas-body d-flex flex-column">
+  <div class="offcanvas-body d-flex flex-column overflow-hidden">
     <!-- Переключатели типов транспорта -->
-    <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist">
+    <ul class="nav nav-pills nav-fill mb-3" id="transport-pills-tab" role="tablist">
       <li class="nav-item" role="presentation">
         <button
           class="nav-link active"
@@ -31,7 +62,7 @@ export const getTransportListTemplate = (data) => {
           type="button"
           role="tab"
         >
-          {{ translations['bus'] }}
+          ${translations["bus"]}
         </button>
       </li>
       <li class="nav-item" role="presentation">
@@ -43,7 +74,7 @@ export const getTransportListTemplate = (data) => {
           type="button"
           role="tab"
         >
-          {{ translations['minibus'] }}
+          ${translations["minibus"]}
         </button>
       </li>
       <li class="nav-item" role="presentation">
@@ -55,7 +86,7 @@ export const getTransportListTemplate = (data) => {
           type="button"
           role="tab"
         >
-          {{ translations['tram'] }}
+          ${translations["tram"]}
         </button>
       </li>
     </ul>
@@ -74,73 +105,32 @@ export const getTransportListTemplate = (data) => {
     </div>
 
     <!-- Списки маршрутов -->
-    <div class="tab-content flex-grow-1" id="pills-tabContent">
+    <div class="tab-content flex-grow-1 overflow-hidden" id="pills-tabContent">
       <!-- Автобусы -->
       <div
         class="tab-pane fade show active h-100"
         id="pills-bus"
         role="tabpanel"
       >
-        <div class="list-group route-list-scroll small" id="busRouteList">
+        <div class="list-group route-list-scroll overflow-y-auto small" id="busRouteList">
           <!-- Пример одного элемента. Потом вы будете генерировать их из JS -->
-          <button
-            class="list-group-item list-group-item-action d-flex align-items-center route-item"
-          >
-            <span class="badge bg-primary me-2 route-badge">1A</span>
-            <div class="flex-grow-1">
-              <div class="fw-semibold">
-                Pulkv. Brie&#382;a iela &ndash; Tonus Elast
-              </div>
-              <div class="text-muted small">
-                Autobuss &bull; interv&#257;ls ~ 15 min
-              </div>
-            </div>
-            <span class="ms-2 text-muted small">&rsaquo;</span>
-          </button>
-
-          <button
-            class="list-group-item list-group-item-action d-flex align-items-center route-item"
-          >
-            <span class="badge bg-primary me-2 route-badge">3</span>
-            <div class="flex-grow-1">
-              <div class="fw-semibold">
-                Slimn&#299;ca &ndash; Oskara Kalpaka vidusskola
-              </div>
-              <div class="text-muted small">Autobuss</div>
-            </div>
-            <span class="ms-2 text-muted small">&rsaquo;</span>
-          </button>
-
-          <!-- добавьте остальные маршруты здесь -->
+          ${buttons_templates["bus"]}
         </div>
       </div>
 
       <!-- Микроавтобусы -->
       <div class="tab-pane fade h-100" id="pills-minibus" role="tabpanel">
-        <div class="list-group route-list-scroll small" id="minibusRouteList">
+        <div class="list-group route-list-scroll overflow-y-auto small" id="minibusRouteList">
           <!-- наполнение аналогично автобусам -->
-          <div class="text-muted small text-center mt-3">
-            Маршруты микроавтобусов будут отображены здесь
-          </div>
+          ${buttons_templates["minibus"]}
         </div>
       </div>
 
       <!-- Трамваи -->
       <div class="tab-pane fade h-100" id="pills-tram" role="tabpanel">
-        <div class="list-group route-list-scroll small" id="tramRouteList">
+        <div class="list-group route-list-scroll overflow-y-auto small" id="tramRouteList">
           <!-- наполнение аналогично -->
-          <button
-            class="list-group-item list-group-item-action d-flex align-items-center route-item"
-          >
-            <span class="badge bg-warning text-dark me-2 route-badge">1</span>
-            <div class="flex-grow-1">
-              <div class="fw-semibold">
-                Br&#299;v&#299;bas iela &ndash; Mirdzas &#296;empes iela
-              </div>
-              <div class="text-muted small">Tramvajs</div>
-            </div>
-            <span class="ms-2 text-muted small">&rsaquo;</span>
-          </button>
+          ${buttons_templates["tram"]}
         </div>
       </div>
     </div>
@@ -159,3 +149,7 @@ export const getTransportListTemplate = (data) => {
     </div>
     `;
 };
+
+/* <div class="text-muted small text-center mt-3">
+            Маршруты микроавтобусов будут отображены здесь
+          </div> */

@@ -7,7 +7,6 @@ import { time_tables } from "../../../json/parse_json.js";
 class SidebarTransportListComponent extends BaseComponent {
   constructor(containerId) {
     super(containerId);
-    this.routes_data = this.getRoutesData();
 
     offCanvas.addEventListener("shown.bs.offcanvas", () => {
       if (this.container.innerHTML == "") {
@@ -18,12 +17,7 @@ class SidebarTransportListComponent extends BaseComponent {
 
   // Возваращает html шаблон с нужными данными
   getTemplate() {
-    return getTransportListTemplate(this.routes_data);
-  }
-
-  // Возвращает данные о каждом маршруте
-  getRoutesData() {
-    return null;
+    return getTransportListTemplate();
   }
 
   render() {
@@ -59,7 +53,9 @@ class SidebarTransportListComponent extends BaseComponent {
     }
   }
 
-  bindEvents() {}
+  bindEvents() {
+    const transport_list_tabs = document.getElementById("transport-pills-tab");
+  }
 
   hide() {}
 }

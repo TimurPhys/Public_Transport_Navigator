@@ -2,7 +2,7 @@ import createLayers from "../core/map.style/map.styles.js";
 import { createCustomIcon } from "../core/map.style/markers.js";
 import markersVisility from "./markers.visibility.js";
 import { showPanel } from "../transports/show_labels.js";
-import { stations, buses, minibuses } from "../routes/routes.js";
+import { stations } from "../routes/routes.js";
 import { getStationIcon } from "../core/map.style/markers.js";
 import { mapType, translations } from "../../json/parse_json.js";
 import { removeCurrentRouteFromMap } from "../sidebar/show_schedule.js";
@@ -37,29 +37,31 @@ function updateMap(vehicles) {
   const uniqueTransportMarkers = new Set();
 
   vehicles.forEach((vehicle) => {
-    const vehicle_data = {
-      transport_id: vehicle["route"],
-      transport_number: vehicle["number"],
-      coords: [vehicle["long"], vehicle["lat"]],
-      azimuth: vehicle["azimuth"],
-    };
-    uniqueTransportMarkers.add(vehicle["number"]);
+    if (vehicle["route"]) {
+      const vehicle_data = {
+        transport_id: vehicle["route"],
+        transport_number: vehicle["number"],
+        coords: [vehicle["long"], vehicle["lat"]],
+        azimuth: vehicle["azimuth"],
+      };
+      uniqueTransportMarkers.add(vehicle["number"]);
 
-    // Если маркера нет на карте, то добавляем его
-    if (!map.isTransportMarkerOnMap(vehicle_data.transport_number)) {
-      // console.log("Добавляем маркер транспорта");
-      const vehicleObject = new TransportMarker(vehicle_data);
-      // Если можно показывать
-      if (markersVisility[vehicleObject.type] === true) {
-        map.displayTransportMarker(vehicleObject);
+      // Если маркера нет на карте, то добавляем его
+      if (!map.isTransportMarkerOnMap(vehicle_data.transport_number)) {
+        // console.log("Добавляем маркер транспорта");
+        const vehicleObject = new TransportMarker(vehicle_data);
+        // Если можно показывать
+        if (markersVisility[vehicleObject.type] === true) {
+          map.displayTransportMarker(vehicleObject);
+        }
       }
-    }
-    // Если маркер уже на карте, то просто меняем его состояние
-    else {
-      const existingVehicle = map.getTransportMarkerByNumber(
-        vehicle_data.transport_number,
-      );
-      existingVehicle.updateTransportMarkerPosition(vehicle_data);
+      // Если маркер уже на карте, то просто меняем его состояние
+      else {
+        const existingVehicle = map.getTransportMarkerByNumber(
+          vehicle_data.transport_number,
+        );
+        existingVehicle.updateTransportMarkerPosition(vehicle_data);
+      }
     }
   });
 

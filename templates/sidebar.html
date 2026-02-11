@@ -1,7 +1,26 @@
 <style>
-  /* Ширина sidebar по умолчанию */
+  /* Основной контейнер sidebar */
   .offcanvas-start {
     width: 40% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100vh !important; /* На всю высоту экрана */
+  }
+
+  /* Контейнер, куда вставляется ваш шаблон из JS */
+  #routesList {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Занимает всё свободное пространство */
+    overflow: hidden; /* Запрещаем общий скролл */
+  }
+
+  /* Внутренние списки маршрутов (те самые .list-group-scroll) */
+  .route-list-scroll {
+    overflow-y: auto !important; /* Разрешаем только вертикальный скролл */
+    flex-grow: 1;
+    max-height: 100%;
+    scrollbar-width: thin; /* Тонкий скролл для Firefox */
   }
 
   /* На телефонах пусть занимает всю ширину */

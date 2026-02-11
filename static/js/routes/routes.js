@@ -1,25 +1,28 @@
-const buses = [
-  "1A",
-  "1s",
-  "2s",
-  "3",
-  "4",
-  "4s",
-  "6",
-  "6A",
-  "7",
-  "8",
-  "9",
-  "9A",
-  "10",
-  "10A",
-  "11",
-  "11A",
-  "12",
-  "12A",
-  "12B",
-];
-const minibuses = ["22", "22S", "23", "25"];
+export const transportType_to_id = {
+  bus: [
+    "1A",
+    "1s",
+    "2s",
+    "3",
+    "4",
+    "4s",
+    "6",
+    "6A",
+    "7",
+    "8",
+    "9",
+    "9A",
+    "10",
+    "10A",
+    "11",
+    "11A",
+    "12",
+    "12A",
+    "12B",
+  ],
+  minibus: ["22", "22S", "23", "25"],
+  tram: ["T"],
+};
 
 const new_routes = {
   T: {
@@ -88054,4 +88057,4 @@ const stations = [
   },
 ];
 
-export { new_routes, buses, minibuses, stations };
+export { new_routes, stations };
