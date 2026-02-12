@@ -39,7 +39,7 @@ class TransportMap {
     this.map.fitBounds(polyline.getBounds());
   }
   // Показывает маркер трнаспорта на карте
-  
+
   displayTransportMarker(markerObject) {
     this.transportMarkers.set(markerObject.transport_number, markerObject);
     markerObject.marker.addTo(this.map);
@@ -47,8 +47,8 @@ class TransportMap {
   // Показывает остановку
   displayStationMarker(stationObject) {
     this.stationMarkers.set(stationObject.coords, stationObject);
-    this.stationsClusterGroup.addLayer(stationObject.marker)
-    this.stationsClusterGroup.addTo(this.map)
+    this.stationsClusterGroup.addLayer(stationObject.marker);
+    this.stationsClusterGroup.addTo(this.map);
   }
 
   // Убираю маркер с карты по номеру транспортного средства
@@ -64,7 +64,7 @@ class TransportMap {
   removeStationMarker(stationId) {
     if (this.stationMarkers.has(stationId)) {
       const marker = this.stationMarkers.get(stationId);
-      this.stationsClusterGroup.removeLayer(marker.marker)
+      this.stationsClusterGroup.removeLayer(marker.marker);
       marker.deleteMarker();
       this.stationMarkers.delete(stationId);
     }
@@ -90,6 +90,25 @@ class TransportMap {
 
   getStationMarkers() {
     return this.stationMarkers;
+  }
+
+  setAllStationsEvents(boolean_value) {
+    for (const station of this.stationMarkers.values()) {
+      if (boolean_value) {
+        station.bindEvents();
+      } else {
+        station.dispatchEvents();
+      }
+    }
+  }
+  setAllTransportsEvents(boolean_value) {
+    for (const transport of this.transportMarkers.values()) {
+      if (boolean_value) {
+        transport.bindEvents();
+      } else {
+        transport.dispatchEvents();
+      }
+    }
   }
 
   // Убрать все маршруты с карты
@@ -127,7 +146,7 @@ class TransportMarker {
     // 2. Если тип не найден, возвращаем null вместо объекта
     if (!transportType) {
       // console.warn(`Тип для ID ${metadata.transport_id} не найден. Объект не создан.`);
-      return null; 
+      return null;
     }
 
     // 3. Если всё ок, создаем и возвращаем экземпляр
@@ -150,33 +169,56 @@ class TransportMarker {
       icon: createCustomIcon(this.type, this.transport_id, this.azimuth),
       zIndexOffset: 900,
     });
-    marker.bindPopup(`
+    this.marker = marker;
+    this.bindEvents();
+  }
+
+  handleMarkerClick = () => {
+    transportEvent.emit("transport:selected", {
+      type: this.type,
+      id: this.transport_id,
+      number: this.transport_number,
+      marker_instance: this.marker,
+    });
+  };
+
+  bindEvents() {
+    this.marker.bindPopup(`
               <b>${translations["number"]}: ${this.transport_number}</b><br>
               ${translations["type"]}: ${translations[this.type]}<br>
               ${translations["route"]}: ${this.transport_id}
           `);
-    marker.on("click", () => {
-      transportEvent.emit("transport:selected", {
-        type: this.type,
-        id: this.transport_id,
-        number: this.transport_number,
-        marker_instance: this.marker,
-      });
-    });
+    this.marker.on("click", this.handleMarkerClick);
+  }
 
-    this.marker = marker;
+  dispatchEvents() {
+    this.marker.off("click", this.handleMarkerClick);
+    this.marker.unbindPopup();
   }
 
   // Обновляет положение маркера на карте и его азимут (угол поворота)
   updateTransportMarkerPosition(new_metadata) {
-    this.marker.setLatLng(new_metadata.coords);
-    this.marker.setIcon(
-      createCustomIcon(this.type, this.transport_id, new_metadata.azimuth),
-    );
+    // Обновляем данные только если данные новые
+    if (
+      this.azimuth !== new_metadata.azimuth ||
+      this.coords[0] !== new_metadata.coords[0] ||
+      this.coords[1] !== new_metadata.coords[1]
+    ) {
+      this.azimuth = new_metadata.azimuth;
+      this.coords = new_metadata.coords;
+      this.marker.setLatLng(new_metadata.coords);
+      this.marker.setIcon(
+        createCustomIcon(this.type, this.transport_id, new_metadata.azimuth),
+      );
+    }
   }
 
   getMarkerNumber() {
     return this.transport_number;
+  }
+
+  blockEvent(boolean_value) {
+    this.block_event = boolean_value;
   }
 
   // Удаляет маркер (полное удаление и стирание с карты происходит в TransportMap)
@@ -204,16 +246,29 @@ class TransportStation {
       icon: getStationIcon("stationIcon", 0.8),
       zIndexOffset: 900,
     });
-    station_marker.bindPopup(`<b>${this.name}</b>`)
     this.marker = station_marker;
-    station_marker.on("click", () => {
-      stationEvent.emit("station:selected", {
-        name: this.name,
-        coords: this.coords,
-        trans_attend: this.trans_attend,
-        marker_instance: this.marker
-      });
+    this.marker.bindPopup(`<b>${this.name}</b>`);
+    this.bindEvents();
+  }
+
+  handleMarkerClick = () => {
+    stationEvent.emit("station:selected", {
+      name: this.name,
+      coords: this.coords,
+      trans_attend: this.trans_attend,
+      marker_instance: this.marker,
     });
+  };
+
+  bindEvents() {
+    this.marker.on("click", this.handleMarkerClick);
+  }
+
+  dispatchEvents() {
+    if (this.marker) {
+      this.marker.off("click", this.handleMarkerClick); // Снимаем конкретный клик
+      // this.marker.unbindPopup(); // Удаляем привязанный попап
+    }
   }
 
   deleteMarker() {

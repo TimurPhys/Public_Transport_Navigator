@@ -2,6 +2,7 @@ import { BaseComponent, offCanvas } from "../../core/base.models.js";
 import { transportListEvent } from "../../core/base.models.js";
 import { transportListComponent } from "./list.sidebar.js";
 import { getScheduleTemplate } from "./templates/schedule.template.js";
+import { map } from "../../map/map.js";
 
 class SidebarScheduleComponent extends BaseComponent {
   constructor(containerId) {
@@ -10,8 +11,7 @@ class SidebarScheduleComponent extends BaseComponent {
 
     transportListEvent.on("route:selected", (route_data) => {
       this.data = route_data;
-      console.log("Route selected Event");
-      transportListComponent.hide();
+
       this.show();
     });
 
@@ -34,9 +34,14 @@ class SidebarScheduleComponent extends BaseComponent {
 
   hide() {
     this.container.style.display = "none";
+    map.setAllStationsEvents(true);
+    map.setAllTransportsEvents(true);
   }
   show() {
     this.container.style.display = "block"; // Или "flex", если используете его
+    transportListComponent.hide();
+    map.setAllStationsEvents(false);
+    map.setAllTransportsEvents(false);
     if (this.container.innerHTML === "") {
       this.render();
     }
