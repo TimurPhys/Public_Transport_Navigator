@@ -1,18 +1,29 @@
 import { BaseComponent } from "../../core/base.models.js";
-import { offCanvas } from "../../core/base.models.js";
-import { getTransportListTemplate, generateRouteButtonsTemplates } from "./templates/list.template.js";
+import { offCanvas, transportListEvent } from "../../core/base.models.js";
+import {
+  getTransportListTemplate,
+  generateRouteButtonsTemplates,
+} from "./templates/list.template.js";
 import { translations } from "../../../json/parse_json.js";
-import { time_tables } from "../../../json/parse_json.js";
 
 class SidebarTransportListComponent extends BaseComponent {
   constructor(containerId) {
     super(containerId);
     this.typed_route = "";
+    this.route_filter_input = null;
 
-    offCanvas.addEventListener("shown.bs.offcanvas", () => {
-      if (this.container.innerHTML == "") {
-        this.render();
+    offCanvas.addEventListener("show.bs.offcanvas", () => {
+      if (this.container.innerHTML === "") this.render();
+      this.show();
+    });
+    offCanvas.addEventListener("hide.bs.offcanvas", () => {
+      this.typed_route = "";
+      if (this.route_filter_input) {
+        this.route_filter_input.value = this.typed_route;
+        this.refreshButtons(this.typed_route);
+        this.bindEventsOnButtons();
       }
+      setTimeout(() => this.show(), 300);
     });
   }
 
@@ -29,7 +40,8 @@ class SidebarTransportListComponent extends BaseComponent {
 
   updateConnectionState(new_state) {
     // Обновляем статус подключения
-    const connection_status_span = document.getElementById("connection-status");
+    const connection_status_span =
+      this.container.querySelector("#connection-status");
     if (connection_status_span) {
       switch (new_state) {
         case "connected":
@@ -48,36 +60,70 @@ class SidebarTransportListComponent extends BaseComponent {
 
   updateVehiclesQuantity(new_quantity) {
     // Обновляем количество транспорта
-    const vehicles_quantity_span = document.getElementById("vehicleCount");
+    const vehicles_quantity_span =
+      this.container.querySelector("#vehicleCount");
     if (vehicles_quantity_span) {
       vehicles_quantity_span.textContent = String(new_quantity);
     }
   }
 
   bindEvents() {
-    const containers = {
-        bus: document.getElementById('busRouteList'),
-        minibus: document.getElementById('minibusRouteList'),
-        tram: document.getElementById('tramRouteList')
-      }
-    const route_filter_input = document.getElementById("routeFilterInput");
-    route_filter_input.addEventListener("input", (e) => {
-      this.typed_route = e.target.value
-
-      const newButtons = generateRouteButtonsTemplates(this.typed_route)
-      containers.bus.innerHTML = newButtons.bus
-      containers.minibus.innerHTML = newButtons.minibus
-      containers.tram.innerHTML = newButtons.tram
-      
-      Object.keys(containers).forEach(type => {
-            if (!newButtons[type]) {
-                containers[type].innerHTML = `<div class="p-3 text-center text-muted">Не найдено</div>`;
-            }
-        });
-    })
+    this.route_filter_input = this.container.querySelector("#routeFilterInput");
+    this.route_filter_input.addEventListener("input", (e) => {
+      this.refreshButtons(e.target.value);
+      this.bindEventsOnButtons();
+    });
+    this.bindEventsOnButtons();
   }
 
-  hide() {}
+  bindEventsOnButtons() {
+    const route_buttons = this.container.querySelectorAll(
+      "button.list-group-item",
+    );
+    route_buttons.forEach((route_button) => {
+      route_button.addEventListener("click", () => {
+        const route_id = route_button.getAttribute("data-id");
+        const default_direction = route_button.getAttribute(
+          "data-default-direction",
+        );
+        transportListEvent.emit("route:selected", {
+          id: route_id,
+          default_direction: default_direction,
+        });
+      });
+    });
+  }
+
+  refreshButtons(value) {
+    const containers = {
+      bus: this.container.querySelector("#busRouteList"),
+      minibus: this.container.querySelector("#minibusRouteList"),
+      tram: this.container.querySelector("#tramRouteList"),
+    };
+
+    this.typed_route = value;
+    const newButtons = generateRouteButtonsTemplates(this.typed_route);
+    containers.bus.innerHTML = newButtons.bus;
+    containers.minibus.innerHTML = newButtons.minibus;
+    containers.tram.innerHTML = newButtons.tram;
+
+    Object.keys(containers).forEach((type) => {
+      if (!newButtons[type]) {
+        containers[type].innerHTML =
+          `<div class="p-3 text-center text-muted">Не найдено</div>`;
+      }
+    });
+  }
+
+  hide() {
+    this.container.classList.replace("component-active", "component-hidden");
+  }
+
+  show() {
+    this.container.classList.remove("component-hidden");
+    this.container.classList.add("component-active");
+    // Если была логика отрисовки, она остается тут
+  }
 }
 
 export const transportListComponent = new SidebarTransportListComponent(

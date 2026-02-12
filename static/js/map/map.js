@@ -49,14 +49,14 @@ function updateMap(vehicles) {
       // Если маркера нет на карте, то добавляем его
       if (!map.isTransportMarkerOnMap(vehicle_data.transport_number)) {
         // console.log("Добавляем маркер транспорта");
-        
-        const vehicleObject = TransportMarker.create(vehicle_data)
+
+        const vehicleObject = TransportMarker.create(vehicle_data);
         // Если можно показывать
         if (vehicleObject) {
           if (markersVisility[vehicleObject.type] === true) {
             map.displayTransportMarker(vehicleObject);
           }
-      }
+        }
       }
       // Если маркер уже на карте, то просто меняем его состояние
       else {
@@ -96,39 +96,16 @@ export function refreshStations() {
       const metadata = {
         name: station.name,
         coords: station.coords,
-        trans_attend: station.trans_attend
-      }
-      const new_station = new TransportStation(metadata)
-      map.displayStationMarker(new_station)
+        trans_attend: station.trans_attend,
+      };
+      const new_station = new TransportStation(metadata);
+      map.displayStationMarker(new_station);
     }
   } else {
-    const existing_station_markers = map.getStationMarkers()
+    const existing_station_markers = map.getStationMarkers();
     for (const existing_station_coords of existing_station_markers.keys()) {
-      map.removeStationMarker(existing_station_coords)
+      map.removeStationMarker(existing_station_coords);
     }
-  }
-  if (totalState.map_stations.length === 0 && yesNo === true) {
-    for (const station of stations) {
-      const marker = L.marker(station.coords, {
-        icon: getStationIcon("stationIcon", 0.8),
-      }).addTo(map);
-      marker.on("click", () => {
-        showPanel(map, null, station);
-      });
-      marker.bindPopup(`<b>${station.name}</b>`);
-      totalState.map_stations.push(marker);
-
-      clusterGroup.addLayer(marker);
-    }
-    map.addLayer(clusterGroup);
-  } else if (totalState.map_stations.length !== 0 && yesNo === false) {
-    for (const station_marker of totalState.map_stations) {
-      map.removeLayer(station_marker);
-      station_marker.off("click");
-    }
-    totalState.map_stations.length = 0;
-    clusterGroup.clearLayers();
-    map.removeLayer(clusterGroup);
   }
 }
 
@@ -167,7 +144,4 @@ function findStationMarkerByName(station_name) {
 
 export { map, routeState, totalState };
 export { updateMap };
-export {
-  openChosenStationPopup,
-  findStationMarkerByName,
-};
+export { openChosenStationPopup, findStationMarkerByName };

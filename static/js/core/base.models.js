@@ -17,6 +17,7 @@ class BaseComponent {
   constructor(containerId) {
     this.container = document.getElementById(containerId);
     this.data = null;
+    this.block_type = null;
   }
 
   // 1. Сохраняем данные
@@ -49,5 +50,6 @@ class BaseComponent {
 export { BaseComponent };
 export const stationEvent = new EventEmitter();
 export const transportEvent = new EventEmitter();
+export const transportListEvent = new EventEmitter();
 
 export const offCanvas = document.getElementById("offcanvas");

@@ -9,7 +9,11 @@ export function generateRouteButtonsTemplates(typed_route) {
     minibus: "",
   };
   for (const transport_type of Object.keys(transportType_to_id)) {
-    for (const id of transportType_to_id[transport_type].filter(el => el.toLowerCase().includes(typed_route.toLowerCase()))) {
+    for (const id of transportType_to_id[transport_type].filter((el) =>
+      typed_route != ""
+        ? el.toLowerCase().includes(typed_route.toLowerCase())
+        : el,
+    )) {
       const direction = Object.keys(time_tables[id])[0];
       html_templates[transport_type] += `
         <button class="list-group-item list-group-item-action d-flex route-item" 
@@ -50,7 +54,7 @@ function generateTypeButtonsTemplates(type, active) {
 export const getTransportListTemplate = (typed_route) => {
   const buttons_templates = generateRouteButtonsTemplates(typed_route);
   return `
-<div class="offcanvas-header border-bottom">
+  <div class="offcanvas-header border-bottom">
     <div>
       <h5 class="offcanvas-title mb-0" id="sidebarRoutesLabel">
         ${translations["first-sidebar-header-h1"]}
