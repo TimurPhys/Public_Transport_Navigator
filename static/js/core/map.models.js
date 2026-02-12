@@ -13,6 +13,16 @@ class TransportMap {
     this.currentRoute = null; // Текующий отображаемый путь
     this.transportMarkers = new Map();
     this.stationMarkers = new Map();
+    this.stationsClusterGroup = L.markerClusterGroup({
+      maxClusterRadius: 10, // Радиус в пикселях для объединения маркеров
+      iconCreateFunction: function (cluster) {
+        return getStationIcon("stationIcon", 1);
+      },
+      spiderfyOnMaxZoom: true, // Раскрывать кластер при максимальном зуме
+      showCoverageOnHover: true, // Показывать область кластера при наведении
+      zoomToBoundsOnClick: true, // Приближать при клике на кластер
+      disableClusteringAtZoom: 14, // Отключить кластеризацию на этом зуме и выше
+    });
     createLayers()[map_type].addTo(this.map); // Инициализация стилей карты
   }
 
@@ -29,6 +39,7 @@ class TransportMap {
     this.map.fitBounds(polyline.getBounds());
   }
   // Показывает маркер трнаспорта на карте
+  
   displayTransportMarker(markerObject) {
     this.transportMarkers.set(markerObject.transport_number, markerObject);
     markerObject.marker.addTo(this.map);
@@ -36,7 +47,8 @@ class TransportMap {
   // Показывает остановку
   displayStationMarker(stationObject) {
     this.stationMarkers.set(stationObject.coords, stationObject);
-    stationObject.marker.addTo(this.map);
+    this.stationsClusterGroup.addLayer(stationObject.marker)
+    this.stationsClusterGroup.addTo(this.map)
   }
 
   // Убираю маркер с карты по номеру транспортного средства
@@ -52,7 +64,7 @@ class TransportMap {
   removeStationMarker(stationId) {
     if (this.stationMarkers.has(stationId)) {
       const marker = this.stationMarkers.get(stationId);
-      this.map.removeLayer(marker.marker);
+      this.stationsClusterGroup.removeLayer(marker.marker)
       marker.deleteMarker();
       this.stationMarkers.delete(stationId);
     }
@@ -76,6 +88,10 @@ class TransportMap {
     return this.transportMarkers;
   }
 
+  getStationMarkers() {
+    return this.stationMarkers;
+  }
+
   // Убрать все маршруты с карты
   hideRoute() {
     this.map.removeLayer(this.currentRoute);
@@ -92,26 +108,40 @@ metadata = {
 }
 */
 class TransportMarker {
-  constructor(metadata) {
-    this.type = null;
+  constructor(metadata, transportType) {
+    this.type = transportType;
     this.azimuth = metadata.azimuth;
     this.transport_id = metadata.transport_id;
     this.transport_number = metadata.transport_number;
     this.coords = metadata.coords;
     this.marker = null;
 
-    this.getTransportType();
     this.createMarker();
   }
 
+  // Статический метод для создания экземпляра
+  static create(metadata) {
+    // 1. Ищем тип до того, как создать объект
+    const transportType = TransportMarker.determineType(metadata.transport_id);
+
+    // 2. Если тип не найден, возвращаем null вместо объекта
+    if (!transportType) {
+      // console.warn(`Тип для ID ${metadata.transport_id} не найден. Объект не создан.`);
+      return null; 
+    }
+
+    // 3. Если всё ок, создаем и возвращаем экземпляр
+    return new TransportMarker(metadata, transportType);
+  }
+
   // Получает тип транспорта (автобус, трамвай, маршрутка)
-  getTransportType() {
-    for (const transport_type of Object.keys(transportType_to_id)) {
-      if (transportType_to_id[transport_type].includes(this.transport_id)) {
-        this.type = transport_type;
-        break;
+  static determineType(transportId) {
+    for (const [type, ids] of Object.entries(transportType_to_id)) {
+      if (ids.includes(transportId)) {
+        return type;
       }
     }
+    return null;
   }
 
   // Создает объект маркера, но не помещает ее на карту
@@ -153,16 +183,16 @@ class TransportMarker {
   deleteMarker() {
     this.marker.off();
     this.marker = null;
-    console.log(`Маркер транспорта ${this.transport_number} уничтожен`);
+    // console.log(`Маркер транспорта ${this.transport_number} уничтожен`);
   }
 }
 
 // Класс остановки транспорта
 class TransportStation {
-  constructor(name, coords, trans_attend) {
-    this.name = name;
-    this.coords = coords;
-    this.trans_attend = trans_attend;
+  constructor(metadata) {
+    this.name = metadata.name;
+    this.coords = metadata.coords;
+    this.trans_attend = metadata.trans_attend;
     this.marker = null;
 
     this.createStation();
@@ -174,20 +204,22 @@ class TransportStation {
       icon: getStationIcon("stationIcon", 0.8),
       zIndexOffset: 900,
     });
+    station_marker.bindPopup(`<b>${this.name}</b>`)
+    this.marker = station_marker;
     station_marker.on("click", () => {
-      stationEvent("station:selected", {
+      stationEvent.emit("station:selected", {
         name: this.name,
         coords: this.coords,
         trans_attend: this.trans_attend,
+        marker_instance: this.marker
       });
     });
-    this.marker = station_marker;
   }
 
-  deleteStation() {
+  deleteMarker() {
     this.marker.off();
     this.marker = null;
-    console.log(`Маркер остановки ${this.name} уничтожен`);
+    // console.log(`Маркер остановки ${this.name} уничтожен`);
   }
 }
 

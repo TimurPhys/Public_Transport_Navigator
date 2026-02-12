@@ -1,4 +1,4 @@
-import { refreshTransports, showStations } from "./map.js";
+import { refreshTransports, refreshStations } from "./map.js";
 
 // Объект в котором будут указаны маркеры, которые можно показывать
 const markersVisility = {
@@ -25,7 +25,7 @@ transport_checkboxes.forEach((checkbox) => {
 
 stations_checkbox.addEventListener("change", () => {
   markersVisility.stations = stations_checkbox.checked;
-  refreshTransports();
+  refreshStations();
 });
 
 export default markersVisility;

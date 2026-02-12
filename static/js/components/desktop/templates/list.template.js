@@ -2,14 +2,14 @@ import { translations } from "../../../../json/parse_json.js";
 import { transportType_to_id } from "../../../routes/routes.js";
 import { time_tables } from "../../../../json/parse_json.js";
 
-function generateRouteButtonsTemplates() {
+export function generateRouteButtonsTemplates(typed_route) {
   const html_templates = {
     tram: "",
     bus: "",
     minibus: "",
   };
   for (const transport_type of Object.keys(transportType_to_id)) {
-    for (const id of transportType_to_id[transport_type]) {
+    for (const id of transportType_to_id[transport_type].filter(el => el.toLowerCase().includes(typed_route.toLowerCase()))) {
       const direction = Object.keys(time_tables[id])[0];
       html_templates[transport_type] += `
         <button class="list-group-item list-group-item-action d-flex route-item" 
@@ -47,8 +47,8 @@ function generateTypeButtonsTemplates(type, active) {
   `;
 }
 
-export const getTransportListTemplate = () => {
-  const buttons_templates = generateRouteButtonsTemplates();
+export const getTransportListTemplate = (typed_route) => {
+  const buttons_templates = generateRouteButtonsTemplates(typed_route);
   return `
 <div class="offcanvas-header border-bottom">
     <div>

@@ -49,11 +49,14 @@ function updateMap(vehicles) {
       // Если маркера нет на карте, то добавляем его
       if (!map.isTransportMarkerOnMap(vehicle_data.transport_number)) {
         // console.log("Добавляем маркер транспорта");
-        const vehicleObject = new TransportMarker(vehicle_data);
+        
+        const vehicleObject = TransportMarker.create(vehicle_data)
         // Если можно показывать
-        if (markersVisility[vehicleObject.type] === true) {
-          map.displayTransportMarker(vehicleObject);
-        }
+        if (vehicleObject) {
+          if (markersVisility[vehicleObject.type] === true) {
+            map.displayTransportMarker(vehicleObject);
+          }
+      }
       }
       // Если маркер уже на карте, то просто меняем его состояние
       else {
@@ -74,7 +77,7 @@ function updateMap(vehicles) {
   }
 }
 
-function refreshTransports() {
+export function refreshTransports() {
   console.log("Обновляем транспорт");
   for (const transport_marker of map.getTransportMarkers().values()) {
     // Если маркер транспорта сейчас отображается на карте
@@ -87,7 +90,23 @@ function refreshTransports() {
   }
 }
 
-function showStations(yesNo) {
+export function refreshStations() {
+  if (markersVisility.stations) {
+    for (const station of stations) {
+      const metadata = {
+        name: station.name,
+        coords: station.coords,
+        trans_attend: station.trans_attend
+      }
+      const new_station = new TransportStation(metadata)
+      map.displayStationMarker(new_station)
+    }
+  } else {
+    const existing_station_markers = map.getStationMarkers()
+    for (const existing_station_coords of existing_station_markers.keys()) {
+      map.removeStationMarker(existing_station_coords)
+    }
+  }
   if (totalState.map_stations.length === 0 && yesNo === true) {
     for (const station of stations) {
       const marker = L.marker(station.coords, {
@@ -112,17 +131,6 @@ function showStations(yesNo) {
     map.removeLayer(clusterGroup);
   }
 }
-
-const clusterGroup = L.markerClusterGroup({
-  maxClusterRadius: 10, // Радиус в пикселях для объединения маркеров
-  iconCreateFunction: function (cluster) {
-    return getStationIcon("stationIcon", 1);
-  },
-  spiderfyOnMaxZoom: true, // Раскрывать кластер при максимальном зуме
-  showCoverageOnHover: true, // Показывать область кластера при наведении
-  zoomToBoundsOnClick: true, // Приближать при клике на кластер
-  disableClusteringAtZoom: 14, // Отключить кластеризацию на этом зуме и выше
-});
 
 function openChosenStationPopup(station_name) {
   for (const marker of routeState.currentMarkers) {
@@ -160,8 +168,6 @@ function findStationMarkerByName(station_name) {
 export { map, routeState, totalState };
 export { updateMap };
 export {
-  refreshTransports,
-  showStations,
   openChosenStationPopup,
   findStationMarkerByName,
 };

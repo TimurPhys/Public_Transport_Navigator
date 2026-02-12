@@ -1,12 +1,13 @@
 import { BaseComponent } from "../../core/base.models.js";
 import { offCanvas } from "../../core/base.models.js";
-import { getTransportListTemplate } from "./templates/list.template.js";
+import { getTransportListTemplate, generateRouteButtonsTemplates } from "./templates/list.template.js";
 import { translations } from "../../../json/parse_json.js";
 import { time_tables } from "../../../json/parse_json.js";
 
 class SidebarTransportListComponent extends BaseComponent {
   constructor(containerId) {
     super(containerId);
+    this.typed_route = "";
 
     offCanvas.addEventListener("shown.bs.offcanvas", () => {
       if (this.container.innerHTML == "") {
@@ -17,7 +18,7 @@ class SidebarTransportListComponent extends BaseComponent {
 
   // Возваращает html шаблон с нужными данными
   getTemplate() {
-    return getTransportListTemplate();
+    return getTransportListTemplate(this.typed_route);
   }
 
   render() {
@@ -54,7 +55,26 @@ class SidebarTransportListComponent extends BaseComponent {
   }
 
   bindEvents() {
-    const transport_list_tabs = document.getElementById("transport-pills-tab");
+    const containers = {
+        bus: document.getElementById('busRouteList'),
+        minibus: document.getElementById('minibusRouteList'),
+        tram: document.getElementById('tramRouteList')
+      }
+    const route_filter_input = document.getElementById("routeFilterInput");
+    route_filter_input.addEventListener("input", (e) => {
+      this.typed_route = e.target.value
+
+      const newButtons = generateRouteButtonsTemplates(this.typed_route)
+      containers.bus.innerHTML = newButtons.bus
+      containers.minibus.innerHTML = newButtons.minibus
+      containers.tram.innerHTML = newButtons.tram
+      
+      Object.keys(containers).forEach(type => {
+            if (!newButtons[type]) {
+                containers[type].innerHTML = `<div class="p-3 text-center text-muted">Не найдено</div>`;
+            }
+        });
+    })
   }
 
   hide() {}
