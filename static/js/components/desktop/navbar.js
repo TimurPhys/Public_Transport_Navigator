@@ -1,6 +1,7 @@
 import { BaseComponent } from "../../core/base.models.js";
 import { getNavbarTemplate } from "./templates/navbar.template.js";
 import { bindFilterEvents } from "../../map/markers.visibility.js";
+import { sidebarComponent } from "./sidebar.js";
 
 class NavbarComponent extends BaseComponent {
   constructor(containerId) {
@@ -18,6 +19,12 @@ class NavbarComponent extends BaseComponent {
 
   bindEvents() {
     bindFilterEvents();
+    const button_toggle_sidebar = this.container.querySelector(
+      "button#toggle-sidebar",
+    );
+    button_toggle_sidebar.addEventListener("click", () => {
+      sidebarComponent.show();
+    });
   }
 
   hide() {

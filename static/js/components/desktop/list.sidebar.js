@@ -1,10 +1,11 @@
 import { BaseComponent } from "../../core/base.models.js";
-import { offCanvas, transportListEvent } from "../../core/base.models.js";
+import { transportListEvent } from "../../core/base.models.js";
 import {
   getTransportListTemplate,
   generateRouteButtonsTemplates,
 } from "./templates/list.template.js";
 import { translations } from "../../../json/parse_json.js";
+import { sidebarComponent } from "./sidebar.js";
 import { navbar } from "./navbar.js";
 
 class SidebarTransportListComponent extends BaseComponent {
@@ -13,21 +14,21 @@ class SidebarTransportListComponent extends BaseComponent {
     this.typed_route = "";
     this.route_filter_input = null;
 
-    offCanvas.addEventListener("show.bs.offcanvas", () => {
-      if (this.container.innerHTML === "") this.render();
-      navbar.hide();
-      this.show();
-    });
-    offCanvas.addEventListener("hide.bs.offcanvas", () => {
-      this.typed_route = "";
-      if (this.route_filter_input) {
-        this.route_filter_input.value = this.typed_route;
-        this.refreshButtons(this.typed_route);
-        this.bindEventsOnButtons();
-      }
-      navbar.show();
-      setTimeout(() => this.show(), 300);
-    });
+    // offCanvas.addEventListener("show.bs.offcanvas", () => {
+    //   if (this.container.innerHTML === "") this.render();
+    //   navbar.hide();
+    //   this.show();
+    // });
+    // offCanvas.addEventListener("hide.bs.offcanvas", () => {
+    //   this.typed_route = "";
+    //   if (this.route_filter_input) {
+    //     this.route_filter_input.value = this.typed_route;
+    //     this.refreshButtons(this.typed_route);
+    //     this.bindEventsOnButtons();
+    //   }
+    //   navbar.show();
+    //   setTimeout(() => this.show(), 300);
+    // });
   }
 
   // Возваращает html шаблон с нужными данными

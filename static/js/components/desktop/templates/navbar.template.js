@@ -7,9 +7,7 @@ export const getNavbarTemplate = () => {
     <!-- Кнопка открытия шторки -->
     <button
       class="btn btn-outline-primary me-2"
-      data-bs-toggle="offcanvas"
-      data-bs-target="#offcanvas"
-      aria-controls="offcanvas"
+      id="toggle-sidebar"
       type="button"
     >
       <i class="bi bi-list"></i>

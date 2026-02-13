@@ -48,7 +48,7 @@
   <style>
     #app-wrapper {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       height: 100vh;
       overflow: hidden;
     }
@@ -58,7 +58,7 @@
       display: flex;
       flex-direction: column;
       position: relative; /* Чтобы инфо-окна позиционировались внутри него */
-      min-height: 0; /* Важно для корректного расчета высоты во Flexbox */
+      height: 100%;
     }
     #map {
       flex-grow: 1;
@@ -69,8 +69,8 @@
   <body>
     <div id="app-wrapper">
       {% include "sidebar.html" %} {% include "modal.html" %}
-      <div id="navbar-block"></div>
       <div id="map-wrapper">
+        <div id="navbar-block"></div>
         <div id="map" class="map-container"></div>
         <div id="transports-info-window"></div>
         <div id="stations-info-window"></div>
@@ -124,6 +124,10 @@
       src="../static/js/components/desktop/navbar.js"
       type="module"
     ></script>
+    <!-- <script
+      src="../static/js/components/desktop/sidebar.js"
+      type="module"
+    ></script> -->
     <script src="../static/js/init.js" type="module"></script>
     <!-- <script src="../static/js/sidebar/list_routes.js" type="module"></script> -->
     <script src="../static/js/routes/routes.js" type="module"></script>

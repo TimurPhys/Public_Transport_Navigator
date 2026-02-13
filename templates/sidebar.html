@@ -8,6 +8,34 @@
     overflow: hidden !important; /* Блокируем общий скролл сайдбара */
   }
 
+  #sidebar {
+    width: 30%;
+    min-width: 350px; /* Чтобы контент не сплющило */
+    height: 100vh;
+    background: white;
+    border-right: 1px solid #ddd;
+
+    /* Анимация перехода */
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0; /* Важно: чтобы карта его не сдавливала */
+  }
+  #sidebar.component-hidden {
+    width: 0;
+    min-width: 0;
+    border-right: none;
+    /* Дополнительно можно чуть сдвинуть контент внутри */
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  #sidebar.component-active {
+    width: 30%;
+    opacity: 1;
+    transform: translateX(0);
+  }
+
   /* Контейнер, куда вставляется ваш шаблон из JS */
   #routesList,
   #scheduleBlock {
@@ -16,7 +44,7 @@
     transition:
       opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
       transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    position: absolute; /* Накладываем их друг на друга */
+    position: absolute;
     top: 0;
     left: 0;
 
@@ -25,19 +53,19 @@
   }
 
   /* Состояние: Виден */
-  .component-active {
+  /* .component-active {
     opacity: 1;
     transform: translateX(0);
     pointer-events: all;
     z-index: 2;
-  }
+  } */
 
   /* Состояние: Скрыт (улетает влево или вправо) */
-  .component-hidden {
+  /* .component-hidden {
     opacity: 0;
     pointer-events: none;
     z-index: 1;
-  }
+  } */
 
   #routesList.component-hidden {
     transform: translateX(-30px); /* Уходит влево */
@@ -63,13 +91,7 @@
   }
 </style>
 
-<div
-  class="offcanvas offcanvas-start"
-  tabindex="-1"
-  data-bs-backdrop="false"
-  id="offcanvas"
-  aria-labelledby="offcanvasLabel"
->
+<div id="sidebar" class="component-hidden">
   <div id="routesList"></div>
   <div id="scheduleBlock"></div>
 </div>

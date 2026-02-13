@@ -119,6 +119,15 @@ class TransportMap {
   hideRoute() {
     this.map.removeLayer(this.currentRoute);
   }
+
+  invalidateMap() {
+    setTimeout(() => {
+      // Проверяем, существует ли переменная и инициализирована ли она
+      if (typeof this.map !== "undefined" && this.map) {
+        this.map.invalidateSize();
+      }
+    }, 500);
+  }
 }
 
 // Класс маркера транспорта

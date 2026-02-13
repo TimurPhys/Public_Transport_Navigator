@@ -1,4 +1,4 @@
-import { BaseComponent, offCanvas } from "../../core/base.models.js";
+import { BaseComponent } from "../../core/base.models.js";
 import { transportListEvent } from "../../core/base.models.js";
 import { transportListComponent } from "./list.sidebar.js";
 import { getScheduleTemplate } from "./templates/schedule.template.js";
@@ -16,10 +16,10 @@ class SidebarScheduleComponent extends BaseComponent {
       this.show();
     });
 
-    offCanvas.addEventListener("hide.bs.offcanvas", () => {
-      this.hide();
-      navbar.show();
-    });
+    // offCanvas.addEventListener("hide.bs.offcanvas", () => {
+    //   this.hide();
+    //   navbar.show();
+    // });
   }
 
   getTemplate() {
