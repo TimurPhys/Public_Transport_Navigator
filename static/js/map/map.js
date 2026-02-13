@@ -1,6 +1,6 @@
 import createLayers from "../core/map.style/map.styles.js";
 import { createCustomIcon } from "../core/map.style/markers.js";
-import markersVisility from "./markers.visibility.js";
+import { markersVisility } from "./markers.visibility.js";
 import { showPanel } from "../transports/show_labels.js";
 import { stations } from "../routes/routes.js";
 import { getStationIcon } from "../core/map.style/markers.js";

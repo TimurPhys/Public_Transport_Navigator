@@ -3,6 +3,7 @@ import { transportListEvent } from "../../core/base.models.js";
 import { transportListComponent } from "./list.sidebar.js";
 import { getScheduleTemplate } from "./templates/schedule.template.js";
 import { map } from "../../map/map.js";
+import { navbar } from "./navbar.js";
 
 class SidebarScheduleComponent extends BaseComponent {
   constructor(containerId) {
@@ -17,6 +18,7 @@ class SidebarScheduleComponent extends BaseComponent {
 
     offCanvas.addEventListener("hide.bs.offcanvas", () => {
       this.hide();
+      navbar.show();
     });
   }
 

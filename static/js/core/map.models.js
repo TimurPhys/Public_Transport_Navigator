@@ -26,6 +26,10 @@ class TransportMap {
     createLayers()[map_type].addTo(this.map); // Инициализация стилей карты
   }
 
+  getMapInstance() {
+    return this.map;
+  }
+
   // Центральный метод для добавления маршрута на карту
   displayRoute(routeData) {
     this.clearAll();

@@ -1,4 +1,5 @@
-#transports-info-window, #stations-info-window {
+#transports-info-window,
+#stations-info-window {
   position: absolute;
   top: 20px;
   right: 20px;
@@ -17,7 +18,8 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
-#transports-info-window.active, #stations-info-window.active {
+#transports-info-window.active,
+#stations-info-window.active {
   opacity: 1;
   transform: translateX(0);
   pointer-events: auto;

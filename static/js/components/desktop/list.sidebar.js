@@ -5,6 +5,7 @@ import {
   generateRouteButtonsTemplates,
 } from "./templates/list.template.js";
 import { translations } from "../../../json/parse_json.js";
+import { navbar } from "./navbar.js";
 
 class SidebarTransportListComponent extends BaseComponent {
   constructor(containerId) {
@@ -14,6 +15,7 @@ class SidebarTransportListComponent extends BaseComponent {
 
     offCanvas.addEventListener("show.bs.offcanvas", () => {
       if (this.container.innerHTML === "") this.render();
+      navbar.hide();
       this.show();
     });
     offCanvas.addEventListener("hide.bs.offcanvas", () => {
@@ -23,6 +25,7 @@ class SidebarTransportListComponent extends BaseComponent {
         this.refreshButtons(this.typed_route);
         this.bindEventsOnButtons();
       }
+      navbar.show();
       setTimeout(() => this.show(), 300);
     });
   }
