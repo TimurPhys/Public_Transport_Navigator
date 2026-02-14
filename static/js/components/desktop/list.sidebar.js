@@ -7,6 +7,7 @@ import {
 import { translations } from "../../../json/parse_json.js";
 import { sidebarEvent } from "../../core/base.models.js";
 import { sidebarComponent } from "./sidebar.js";
+import { time_tables } from "../../../json/parse_json.js";
 
 class SidebarTransportListComponent extends BaseComponent {
   constructor(containerId) {
@@ -91,10 +92,15 @@ class SidebarTransportListComponent extends BaseComponent {
         const default_direction = route_button.getAttribute(
           "data-default-direction",
         );
+        const station = Object.keys(
+          time_tables[route_id][default_direction],
+        )[0];
         transportListEvent.emit("route:selected", {
           id: route_id,
           direction: default_direction,
+          station: station,
         });
+        this.hide();
       });
     });
     const close_button = this.container.querySelector("#btn-close");

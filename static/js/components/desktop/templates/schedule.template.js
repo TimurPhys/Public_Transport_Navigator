@@ -23,7 +23,7 @@ export function generateStationsButtons(data) {
   stations.forEach((station) => {
     buttons += `<a
             type="button"
-            class="list-group-item list-group-item-action"
+            class="list-group-item list-group-item-action ${data.station === station ? "active" : ""}"
             id="station-button"
             data-route="${route_id}"
             data-station="${station}"
@@ -35,78 +35,63 @@ export function generateStationsButtons(data) {
   return buttons;
 }
 
-export function generateInfoContent(data) {
+function generateTableCollapseButton(data, days_type) {
   return `
-          <div
-            class="tab-pane fade show active"
-            id="list-home"
-            role="tabpanel"
-            aria-labelledby="list-home-list"
-          >
-            <div class="card mb-3">
-              <div class="card-header" style="font-weight: 600">
-                Также посещают:
-              </div>
-            </div>
+        <div 
+          class="card-header bg-white py-1 mt-2 d-flex justify-content-center ${data.collapsed_tables.includes(days_type) ? "collapsed" : ""}" 
+          role="button"
+          id="button-collapse-table"
+          data-bs-toggle="collapse"
+          data-dayType="${days_type}"
+          data-bs-target="#collapse-${days_type}" 
+          aria-expanded="false" 
+        >
+          <i class="bi bi-chevron-down transition-icon me-1"></i>
+          <span>${translations[days_type]}</span>
+        </div>
+  `;
+}
 
-            <div class="container d-flex flex-column">
+export function generateInfoContent(data) {
+  const route_id = data.id;
+  const direction = data.direction;
+  const station = data.station;
+  const stationData = time_tables[route_id][direction][station];
 
-            <div 
-              class="card-header bg-white p-2 d-flex justify-content-between align-items-center" 
-              role="button"
-              data-bs-toggle="collapse" 
-              data-bs-target="#collapseWorkdays" 
-              aria-expanded="false" 
-              style="cursor: pointer; font-weight: 600;"
-            >
-              <span>Рабочие дни</span>
-              <i class="bi bi-chevron-down transition-icon"></i>
-            </div>
+  let tables = "";
+  for (const days_type of Object.keys(stationData)) {
+    const day_time_table = stationData[days_type];
+    let trs = "";
+    for (const hour of Object.keys(day_time_table)) {
+      let minute_links = "";
+      for (const minute of day_time_table[hour]) {
+        const minute_value = minute.split("-")[0];
+        const route = minute.split("-")[1];
+        const a_link = `<a id="minute-link" data-route="${route}" class="link-opacity-75-hover me-1 ${route === route_id ? "" : "other_route"}">${minute_value}</a>`;
+        minute_links += a_link;
+      }
+      trs += `
+            <tr>
+              <td class="fw-bold">${hour}</td>
+              <td class="">${minute_links}</td>
+            </tr>
+      `;
+    }
 
-            <div class="collapse show" id="collapseWorkdays">
+    tables += `
+    ${generateTableCollapseButton(data, days_type)}
+    <div class="collapse ${data.collapsed_tables.includes(days_type) ? "" : "show"}" id="collapse-${days_type}">
               <div class="card-body p-0">
-                <table class="table table-bordered mb-0">
+                <table class="table table-bordered table-sm mb-0 schedule-table">
                   <tbody>
-                    <tr><td class="fw-bold" style="width: 50px;">6</td><td>05, 25, 45</td></tr>
-                    <tr><td class="fw-bold">7</td><td>10, 30, 50</td></tr>
+                    ${trs}
                   </tbody>
                 </table>
               </div>
-            </div>
+            </div>`;
+  }
 
-              <table class="table table-bordered mb-4" style="width: auto">
-                <thead>
-                  <tr>
-                    <th colspan="2" style="font-weight: 600">Выходные дни</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td style="font-weight: 600">6</td>
-                    <td>adsf</td>
-                  </tr>
-                  <tr>
-                    <td>12</td>
-                    <td>Cell D</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="card mb-3">
-              <div class="card-header">
-                <strong style="font-weight: 600">Перевозчик:</strong> A/S
-                "Liepājas autobusu parks"
-              </div>
-            </div>
-
-            <div class="card">
-              <div class="card-header">
-                <strong style="font-weight: 600">Подсказки:</strong> Lorem ipsum
-                dolor, sit amet consectetur adipisicing elit. Saepe, quod?
-              </div>
-            </div>
-          </div>
-          `;
+  return tables;
 }
 
 // Отображение расписания
@@ -152,7 +137,34 @@ export const getScheduleTemplate = (data) => {
           id="nav-tabContent"
           style="background-color: whitesmoke; border-radius: 2%"
         >
-          ${generateInfoContent(data)}
+          <div
+            class="tab-pane fade show active"
+            id="list-home"
+            role="tabpanel"
+            aria-labelledby="list-home-list"
+          >
+            <div class="card">
+              <div class="card-header" style="font-weight: 600">
+                Также посещают:
+              </div>
+            </div>
+            <div class="container d-flex flex-column px-0" id="schedule-container">
+              ${generateInfoContent(data)}
+            </div>
+            <div class="card my-3">
+              <div class="card-header">
+                <strong style="font-weight: 600">Перевозчик:</strong> A/S
+                "Liepājas autobusu parks"
+              </div>
+            </div>
+
+            <div class="card mt-3">
+              <div class="card-header">
+                <strong style="font-weight: 600">Подсказки:</strong> Lorem ipsum
+                dolor, sit amet consectetur adipisicing elit. Saepe, quod?
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

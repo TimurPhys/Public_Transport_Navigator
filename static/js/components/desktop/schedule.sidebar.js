@@ -1,6 +1,5 @@
 import { BaseComponent } from "../../core/base.models.js";
 import { transportListEvent } from "../../core/base.models.js";
-import { transportListComponent } from "./list.sidebar.js";
 import { getScheduleTemplate } from "./templates/schedule.template.js";
 import { map } from "../../map/map.js";
 import { sidebarEvent } from "../../core/base.models.js";
@@ -13,9 +12,13 @@ class SidebarScheduleComponent extends BaseComponent {
   constructor(containerId) {
     super(containerId);
     this.containers = null;
+    this.data = {
+      collapsed_tables: [],
+      station: null,
+    };
 
     transportListEvent.on("route:selected", (route_data) => {
-      this.data = route_data;
+      Object.assign(this.data, route_data); // Копируем поля из route_data в this.data
       this.show();
     });
 
@@ -35,7 +38,7 @@ class SidebarScheduleComponent extends BaseComponent {
     this.container.innerHTML = this.getTemplate();
     this.containers = {
       buttons_list: this.container.querySelector(".list-group"),
-      info_content: this.container.querySelector("#nav-tabContent"),
+      info_content: this.container.querySelector("#schedule-container"),
     };
 
     this.bindEvents();
@@ -69,9 +72,25 @@ class SidebarScheduleComponent extends BaseComponent {
           station_button.classList.remove("active");
         });
         station_button.classList.add("active");
-        this.containers.info_content.innerHTML = generateInfoContent();
+        const chosen_station_name = station_button.getAttribute("data-station");
+        this.data.station = chosen_station_name;
+        this.checkTablesCollapse();
+        this.containers.info_content.innerHTML = generateInfoContent(this.data);
       });
     });
+  }
+
+  checkTablesCollapse() {
+    let collapsed_tables = [];
+    const tables = this.container.querySelectorAll("#button-collapse-table");
+    tables.forEach((table) => {
+      if (table.classList.contains("collapsed")) {
+        const table_type = table.getAttribute("data-dayType");
+        collapsed_tables.push(table_type);
+      }
+    });
+    console.log(collapsed_tables);
+    this.data.collapsed_tables = collapsed_tables;
   }
 
   bindEvents() {
@@ -87,7 +106,6 @@ class SidebarScheduleComponent extends BaseComponent {
   }
   show() {
     this.container.style.display = "block"; // Или "flex", если используете его
-    transportListComponent.hide();
     // Отключаем events у маркеров на карте
     map.setAllStationsEvents(false);
     map.setAllTransportsEvents(false);

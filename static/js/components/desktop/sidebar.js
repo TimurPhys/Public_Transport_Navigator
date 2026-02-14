@@ -50,10 +50,10 @@ class SibebarComponent extends BaseComponent {
 export const sidebarComponent = new SibebarComponent("sidebar");
 
 // Чисто для разработки
-setTimeout(() => {
-  sidebarComponent.show();
-  transportListEvent.emit("route:selected", {
-    id: "3",
-    direction: "Mirdzas Ķempes iela - Pulkveža Brieža iela",
-  });
-}, 500);
+// setTimeout(() => {
+//   sidebarComponent.show();
+//   transportListEvent.emit("route:selected", {
+//     id: "3",
+//     direction: "Mirdzas Ķempes iela - Pulkveža Brieža iela",
+//   });
+// }, 500);
