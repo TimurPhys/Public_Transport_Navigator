@@ -43,6 +43,10 @@
     <link rel="stylesheet" href="../static/css/components/navbar.css" />
     <link rel="stylesheet" href="../static/css/components/cards.css" />
     <link rel="stylesheet" href="../static/css/components/sidebar.css" />
+    <link
+      rel="stylesheet"
+      href="../static/css/custom-components/btn.back-close.css"
+    />
   </head>
 
   <style>
@@ -53,6 +57,13 @@
       overflow: hidden;
     }
     /* Теперь обертка контролирует пространство под навбаром */
+    #content-wrapper {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative; /* Чтобы инфо-окна позиционировались внутри него */
+      height: 100%;
+    }
     #map-wrapper {
       flex-grow: 1;
       display: flex;
@@ -69,11 +80,13 @@
   <body>
     <div id="app-wrapper">
       {% include "sidebar.html" %} {% include "modal.html" %}
-      <div id="map-wrapper">
+      <div id="content-wrapper">
         <div id="navbar-block"></div>
-        <div id="map" class="map-container"></div>
-        <div id="transports-info-window"></div>
-        <div id="stations-info-window"></div>
+        <div id="map-wrapper">
+          <div id="map" class="map-container"></div>
+          <div id="transports-info-window"></div>
+          <div id="stations-info-window"></div>
+        </div>
       </div>
     </div>
 

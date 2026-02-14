@@ -5,8 +5,8 @@ import {
   generateRouteButtonsTemplates,
 } from "./templates/list.template.js";
 import { translations } from "../../../json/parse_json.js";
+import { sidebarEvent } from "../../core/base.models.js";
 import { sidebarComponent } from "./sidebar.js";
-import { navbar } from "./navbar.js";
 
 class SidebarTransportListComponent extends BaseComponent {
   constructor(containerId) {
@@ -14,21 +14,22 @@ class SidebarTransportListComponent extends BaseComponent {
     this.typed_route = "";
     this.route_filter_input = null;
 
-    // offCanvas.addEventListener("show.bs.offcanvas", () => {
-    //   if (this.container.innerHTML === "") this.render();
-    //   navbar.hide();
-    //   this.show();
-    // });
-    // offCanvas.addEventListener("hide.bs.offcanvas", () => {
-    //   this.typed_route = "";
-    //   if (this.route_filter_input) {
-    //     this.route_filter_input.value = this.typed_route;
-    //     this.refreshButtons(this.typed_route);
-    //     this.bindEventsOnButtons();
-    //   }
-    //   navbar.show();
-    //   setTimeout(() => this.show(), 300);
-    // });
+    sidebarEvent.on("sidebar:shown", () => {
+      if (this.container.innerHTML === "") this.render();
+      this.show();
+    });
+    sidebarEvent.on("sidebar:movedBack", () => {
+      if (this.container.innerHTML === "") this.render();
+      this.show();
+    });
+    sidebarEvent.on("sidebar:hidden", () => {
+      this.typed_route = "";
+      if (this.route_filter_input) {
+        this.route_filter_input.value = this.typed_route;
+        this.refreshButtons(this.typed_route);
+        this.bindEventsOnButtons();
+      }
+    });
   }
 
   // Возваращает html шаблон с нужными данными
@@ -92,9 +93,13 @@ class SidebarTransportListComponent extends BaseComponent {
         );
         transportListEvent.emit("route:selected", {
           id: route_id,
-          default_direction: default_direction,
+          direction: default_direction,
         });
       });
+    });
+    const close_button = this.container.querySelector("#btn-close");
+    close_button.addEventListener("click", () => {
+      sidebarEvent.emit("sidebar:hidden", {});
     });
   }
 
@@ -133,3 +138,6 @@ class SidebarTransportListComponent extends BaseComponent {
 export const transportListComponent = new SidebarTransportListComponent(
   "routesList",
 );
+
+transportListComponent.render();
+transportListComponent.show();

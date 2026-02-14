@@ -51,7 +51,7 @@ await parse_json("/static/json/stations.json").then((data) => {
 //   }
 // }
 console.log(time_tables);
-console.log(new_routes);
+// console.log(new_routes);
 console.log(stations);
 
 export { time_tables, new_routes, stations, translations, mapType };

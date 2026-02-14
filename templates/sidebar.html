@@ -1,15 +1,7 @@
 <style>
   /* Основной контейнер sidebar */
-  .offcanvas-start {
-    width: 40% !important;
-    height: 100vh !important;
-    display: flex !important;
-    flex-direction: column !important;
-    overflow: hidden !important; /* Блокируем общий скролл сайдбара */
-  }
-
   #sidebar {
-    width: 30%;
+    width: 40%;
     min-width: 350px; /* Чтобы контент не сплющило */
     height: 100vh;
     background: white;
@@ -31,7 +23,7 @@
     opacity: 0;
   }
   #sidebar.component-active {
-    width: 30%;
+    width: 40%;
     opacity: 1;
     transform: translateX(0);
   }
@@ -53,19 +45,19 @@
   }
 
   /* Состояние: Виден */
-  /* .component-active {
+  .component-active {
     opacity: 1;
     transform: translateX(0);
     pointer-events: all;
     z-index: 2;
-  } */
+  }
 
   /* Состояние: Скрыт (улетает влево или вправо) */
-  /* .component-hidden {
+  .component-hidden {
     opacity: 0;
     pointer-events: none;
     z-index: 1;
-  } */
+  }
 
   #routesList.component-hidden {
     transform: translateX(-30px); /* Уходит влево */
@@ -76,10 +68,10 @@
   }
 
   /* Внутренние списки маршрутов (те самые .list-group-scroll) */
-  .route-list-scroll {
+  .route-list-scroll,
+  .scrollable-list {
     overflow-y: auto !important;
     max-height: 100%; /* Добавьте это */
-    display: block; /* И это */
     scrollbar-width: thin; /* Тонкий скролл для Firefox */
   }
 

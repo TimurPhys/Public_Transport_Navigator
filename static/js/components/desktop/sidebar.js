@@ -1,10 +1,18 @@
 import { BaseComponent } from "../../core/base.models.js";
 import { map } from "../../map/map.js";
+import { sidebarEvent } from "../../core/base.models.js";
+import { transportListEvent } from "../../core/base.models.js";
 
 class SibebarComponent extends BaseComponent {
   constructor(containerId) {
     super(containerId);
     this.isVisible = false;
+    sidebarEvent.on("sidebar:shown", () => {
+      this.show();
+    });
+    sidebarEvent.on("sidebar:hidden", () => {
+      this.hide();
+    });
   }
 
   hide() {
@@ -40,3 +48,12 @@ class SibebarComponent extends BaseComponent {
 }
 
 export const sidebarComponent = new SibebarComponent("sidebar");
+
+// Чисто для разработки
+setTimeout(() => {
+  sidebarComponent.show();
+  transportListEvent.emit("route:selected", {
+    id: "3",
+    direction: "Mirdzas Ķempes iela - Pulkveža Brieža iela",
+  });
+}, 500);

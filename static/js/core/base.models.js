@@ -51,3 +51,4 @@ export { BaseComponent };
 export const stationEvent = new EventEmitter();
 export const transportEvent = new EventEmitter();
 export const transportListEvent = new EventEmitter();
+export const sidebarEvent = new EventEmitter();

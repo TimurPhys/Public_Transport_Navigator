@@ -54,26 +54,27 @@ function generateTypeButtonsTemplates(type, active) {
 export const getTransportListTemplate = (typed_route) => {
   const buttons_templates = generateRouteButtonsTemplates(typed_route);
   return `
-  <div class="offcanvas-header border-bottom">
+  <div class="sidebar-list-content d-flex flex-column h-100">
+  <div class="sidebar-header p-3 border-bottom d-flex justify-content-between align-items-center flex-shrink-0">
     <div>
-      <h5 class="offcanvas-title mb-0" id="sidebarRoutesLabel">
+      <h5 class="mb-0" id="sidebarRoutesLabel">
         ${translations["first-sidebar-header-h1"]}
       </h5>
       <small class="text-muted"
         >${translations["first-sidebar-header-p"]}</small
       >
     </div>
-    <button
-      type="button"
-      class="btn-close text-reset"
-      data-bs-dismiss="offcanvas"
+    <button 
+      type="button" 
+      class="btn-close-custom" 
+      id="btn-close" 
       aria-label="Close"
-    ></button>
+    ><i class="bi bi-x-lg"></i></button>
   </div>
 
-  <div class="offcanvas-body d-flex flex-column overflow-hidden">
+  <div class="sidebar-body p-3 d-flex flex-column flex-grow-1 overflow-hidden">
     <!-- Переключатели типов транспорта -->
-    <ul class="nav nav-pills nav-fill mb-3" id="transport-pills-tab" role="tablist">
+    <ul class="nav nav-pills nav-fill mb-3 flex-shrink-0" id="transport-pills-tab" role="tablist">
       ${generateTypeButtonsTemplates("bus", true)}
       ${generateTypeButtonsTemplates("minibus", false)}
       ${generateTypeButtonsTemplates("tram", false)}
@@ -133,6 +134,7 @@ export const getTransportListTemplate = (typed_route) => {
         ${translations["transports-quantity"]}:
         <span id="vehicleCount" id="vehicles_quantity">48</span>
       </div>
+    </div>
     </div>
     </div>
     `;
