@@ -60,6 +60,9 @@ class SidebarScheduleComponent extends BaseComponent {
     select.addEventListener("change", (e) => {
       const selectedDirection = e.target.value;
       this.data.direction = selectedDirection;
+      // const first_station = selectedDirection.split(" - ")[0];
+      // console.log(first_station);
+      // this.data.station = first_station;
       this.render();
     });
   }
@@ -76,6 +79,22 @@ class SidebarScheduleComponent extends BaseComponent {
         this.data.station = chosen_station_name;
         this.checkTablesCollapse();
         this.containers.info_content.innerHTML = generateInfoContent(this.data);
+        this.bindEventsOnMinuteLinks();
+      });
+    });
+  }
+
+  bindEventsOnMinuteLinks() {
+    const minute_links = this.container.querySelectorAll("a#minute-link");
+    minute_links.forEach((minute_link) => {
+      minute_link.addEventListener("click", () => {
+        minute_links.forEach((minute_link) => {
+          minute_link.classList.remove("active");
+        });
+        const hour = minute_link.getAttribute("data-hour");
+        const minutes = minute_link.textContent;
+        const daysType = minute_link.getAttribute("data-daysType");
+        minute_link.classList.add("active");
       });
     });
   }
@@ -89,7 +108,6 @@ class SidebarScheduleComponent extends BaseComponent {
         collapsed_tables.push(table_type);
       }
     });
-    console.log(collapsed_tables);
     this.data.collapsed_tables = collapsed_tables;
   }
 
@@ -97,6 +115,7 @@ class SidebarScheduleComponent extends BaseComponent {
     this.bindSelectEvents();
     this.bindSidebarEvents();
     this.bindStationButtonsEvents();
+    this.bindEventsOnMinuteLinks();
   }
 
   hide() {

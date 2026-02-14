@@ -67,7 +67,7 @@ export function generateInfoContent(data) {
       for (const minute of day_time_table[hour]) {
         const minute_value = minute.split("-")[0];
         const route = minute.split("-")[1];
-        const a_link = `<a id="minute-link" data-route="${route}" class="link-opacity-75-hover me-1 ${route === route_id ? "" : "other_route"}">${minute_value}</a>`;
+        const a_link = `<a id="minute-link" data-daysType="${days_type}" data-hour="${hour}" data-route="${route}" class="link-opacity-75-hover me-1 ${route === route_id ? "" : "other_route"}">${minute_value}</a>`;
         minute_links += a_link;
       }
       trs += `
@@ -126,12 +126,12 @@ export const getScheduleTemplate = (data) => {
     </div>
 
     <div class="row flex-grow-1 overflow-hidden scrollable-list">
-      <div class="col-4 pe-0 h-100">
+      <div class="col pe-0 h-100">
         <div class="list-group">
           ${generateStationsButtons(data)}
         </div>
       </div>
-      <div class="col-8 pe-1">
+      <div class="col pe-1">
         <div
           class="tab-content p-3"
           id="nav-tabContent"

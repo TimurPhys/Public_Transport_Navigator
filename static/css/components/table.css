@@ -46,6 +46,12 @@
   opacity: 0.75;
 }
 
+#minute-link.active {
+  border: 2px solid #2a6dd3;
+  border-radius: 15%;
+  opacity: 1;
+}
+
 /* Если минута от другого маршрута, сделаем её бледнее */
 #minute-link.other_route {
   color: #1c65d3;
