@@ -1,0 +1,58 @@
+#button-collapse-table {
+  cursor: pointer;
+  border: 1px solid #dee2e6;
+  border-bottom: none;
+}
+
+#button-collapse-table.collapsed {
+  border: 1px solid #dee2e6;
+}
+
+#button-collapse-table i {
+  transition: transform 0.4s ease;
+  transform: rotate(0deg);
+}
+
+#button-collapse-table.collapsed i {
+  transform: rotate(180deg);
+}
+
+/* Убираем лишние отступы в ячейках */
+.schedule-table td {
+  padding: 2px 4px !important; /* Минимум места вокруг цифр */
+  vertical-align: middle;
+  font-size: 0.85rem; /* Чуть уменьшим шрифт для компактности */
+}
+
+/* Фиксируем ширину колонки с часом, чтобы она не гуляла */
+.schedule-table td:first-child {
+  width: 35px;
+  text-align: center;
+  background-color: #f8f9fa; /* Выделим час легким фоном */
+  border-right: 2px solid #dee2e6;
+}
+
+/* Стили для ссылок-минут, чтобы они не слипались */
+#minute-link {
+  cursor: pointer;
+  display: inline-block;
+  padding: 0 2px;
+  text-decoration: none;
+  color: #333;
+  line-height: 1.2;
+}
+
+#minute-link:hover {
+  opacity: 0.75;
+}
+
+#minute-link.active {
+  border: 2px solid #2a6dd3;
+  border-radius: 15%;
+  opacity: 1;
+}
+
+/* Если минута от другого маршрута, сделаем её бледнее */
+#minute-link.other_route {
+  color: #1c65d3;
+}

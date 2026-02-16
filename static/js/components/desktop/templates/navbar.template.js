@@ -1,11 +1,13 @@
-<nav class="navbar navbar-expand-lg bg-white topbar">
+import { translations } from "../../../../json/parse_json.js";
+
+export const getNavbarTemplate = () => {
+  return `
+  <nav class="navbar navbar-expand-lg bg-white topbar">
   <div class="container-fluid px-3 px-md-4">
     <!-- Кнопка открытия шторки -->
     <button
       class="btn btn-outline-primary me-2"
-      data-bs-toggle="offcanvas"
-      data-bs-target="#offcanvas"
-      aria-controls="offcanvas"
+      id="toggle-sidebar"
       type="button"
     >
       <i class="bi bi-list"></i>
@@ -19,7 +21,7 @@
         class="btn-group w-100 justify-content-center d-flex me-3 hide-route d-none"
         role="group"
       >
-        <button class="btn btn-info">{{ translations['close-button'] }}</button>
+        <button class="btn btn-info">${translations["close-button"]}</button>
       </div>
 
       <button
@@ -46,7 +48,7 @@
             <input
               type="text"
               class="form-control"
-              placeholder="{{ translations['station-search'] }}"
+              placeholder="${translations["station-search"]}"
               id="stopSearch"
             />
           </div>
@@ -60,7 +62,7 @@
             data-bs-toggle="modal"
             id="viewDropdown"
           >
-            {{ translations['settings'] }}
+            ${translations["settings"]}
           </a>
         </li>
 
@@ -73,7 +75,7 @@
               for="filterBus"
               data-bs-toggle="tooltip"
               data-bs-placement="bottom"
-              data-bs-title="{{ translations['bus'] }}"
+              data-bs-title="${translations["bus"]}"
               ><i class="bi bi-bus-front"></i
             ></label>
 
@@ -88,7 +90,7 @@
               for="filterMinibus"
               data-bs-toggle="tooltip"
               data-bs-placement="bottom"
-              data-bs-title="{{ translations['minibus'] }}"
+              data-bs-title="${translations["minibus"]}"
               ><i class="bi bi-truck"></i
             ></label>
 
@@ -98,7 +100,7 @@
               for="filterTram"
               data-bs-toggle="tooltip"
               data-bs-placement="bottom"
-              data-bs-title="{{ translations['tram'] }}"
+              data-bs-title="${translations["tram"]}"
               ><i class="bi bi-train-front"></i
             ></label>
           </div>
@@ -117,7 +119,7 @@
             <label
               data-bs-toggle="tooltip"
               data-bs-placement="bottom"
-              data-bs-title="{{ translations['stations'] }}"
+              data-bs-title="${translations["stations"]}"
               class="btn btn-outline-primary"
               for="filterStation"
               style="width: 42px; height: 38px; position: relative"
@@ -142,3 +144,5 @@
     </div>
   </div>
 </nav>
+    `;
+};

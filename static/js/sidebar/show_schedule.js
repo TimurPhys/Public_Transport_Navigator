@@ -13,7 +13,7 @@ import { new_routes } from "../routes/routes.js";
 import { translations } from "../../json/parse_json.js";
 
 const secondOffcanvasDiv = document.getElementById("secondOffcanvas");
-const firstOffcanvasDiv = document.getElementById("offcanvas");
+const firstOffcanvasDiv = document.getElementById("sidebar");
 const firstOffcanvas = new bootstrap.Offcanvas(firstOffcanvasDiv);
 const route_items = document.querySelectorAll("button.route-item");
 

@@ -37,6 +37,25 @@ await parse_json("/static/json/stations.json").then((data) => {
   }
 });
 
+// function downloadObjectAsJson(exportObj, exportName) {
+//   // 1. Превращаем объект в строку JSON с отступами (для красоты)
+//   const dataStr =
+//     "data:text/json;charset=utf-8," +
+//     encodeURIComponent(JSON.stringify(exportObj, null, 2));
+
+//   // 2. Создаем временный элемент <a> (ссылку)
+//   const downloadAnchorNode = document.createElement("a");
+
+//   // 3. Устанавливаем атрибуты: путь к данным и имя файла
+//   downloadAnchorNode.setAttribute("href", dataStr);
+//   downloadAnchorNode.setAttribute("download", exportName + ".json");
+
+//   // 4. Добавляем в документ, "кликаем" и удаляем
+//   document.body.appendChild(downloadAnchorNode);
+//   downloadAnchorNode.click();
+//   downloadAnchorNode.remove();
+// }
+
 // let new_time_tables = {};
 // for (const route_key of Object.keys(time_tables)) {
 //   new_time_tables[route_key] = {};
@@ -45,13 +64,23 @@ await parse_json("/static/json/stations.json").then((data) => {
 //     for (const station_key of Object.keys(
 //       time_tables[route_key][direction_key],
 //     )) {
-//       new_time_tables[route_key][direction_key][station_key] =
-//         time_tables[route_key][direction_key][station_key][0];
+//       new_time_tables[route_key][direction_key][station_key] = {};
+//       const stationData = time_tables[route_key][direction_key][station_key];
+
+//       new_time_tables[route_key][direction_key][station_key]["working_days"] =
+//         stationData[0];
+//       if (stationData.length === 2) {
+//         new_time_tables[route_key][direction_key][station_key]["holidays"] =
+//           stationData[1];
+//       }
 //     }
 //   }
 // }
+
+// downloadObjectAsJson(new_time_tables, "new_time_tables");
+
 console.log(time_tables);
-console.log(new_routes);
+// console.log(new_routes);
 console.log(stations);
 
 export { time_tables, new_routes, stations, translations, mapType };

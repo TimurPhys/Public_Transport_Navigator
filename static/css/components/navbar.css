@@ -1,4 +1,4 @@
-@media (max-width: 999px) {
+@media (max-width: 990px) {
   .navbar-nav {
     flex-direction: row !important;
     flex-wrap: wrap;
@@ -59,12 +59,13 @@
 }
 
 /* Улучшенное отображение на десктопе */
+
 @media (min-width: 990px) {
   #topbarControls .navbar-nav {
     flex-wrap: nowrap;
   }
   .navbar-nav {
-    max-width: 1200px; /* или нужная тебе ширина */
+    max-width: 1200px;
     justify-content: flex-end;
   }
 
@@ -81,4 +82,21 @@
   div.hide-route.d-flex {
     display: none !important;
   }
+}
+
+#navbar-block {
+  transition:
+    margin-top 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.4s ease,
+    visibility 0.5s;
+  /* Фиксируем высоту, чтобы анимация была стабильной */
+  height: auto;
+  z-index: 1000;
+}
+
+.navbar-hidden {
+  /* Сдвигаем наверх на высоту навбара (обычно около 60-70px, можно подогнать) */
+  margin-top: -56px;
+  opacity: 0;
+  visibility: hidden;
 }

@@ -1,6 +1,6 @@
 import createLayers from "../core/map.style/map.styles.js";
 import { createCustomIcon } from "../core/map.style/markers.js";
-import markersVisility from "./markers.visibility.js";
+import { markersVisility } from "./markers.visibility.js";
 import { showPanel } from "../transports/show_labels.js";
 import { stations } from "../routes/routes.js";
 import { getStationIcon } from "../core/map.style/markers.js";
@@ -49,14 +49,14 @@ function updateMap(vehicles) {
       // Если маркера нет на карте, то добавляем его
       if (!map.isTransportMarkerOnMap(vehicle_data.transport_number)) {
         // console.log("Добавляем маркер транспорта");
-        
-        const vehicleObject = TransportMarker.create(vehicle_data)
+
+        const vehicleObject = TransportMarker.create(vehicle_data);
         // Если можно показывать
         if (vehicleObject) {
           if (markersVisility[vehicleObject.type] === true) {
             map.displayTransportMarker(vehicleObject);
           }
-      }
+        }
       }
       // Если маркер уже на карте, то просто меняем его состояние
       else {
@@ -96,15 +96,15 @@ export function refreshStations() {
       const metadata = {
         name: station.name,
         coords: station.coords,
-        trans_attend: station.trans_attend
-      }
-      const new_station = new TransportStation(metadata)
-      map.displayStationMarker(new_station)
+        trans_attend: station.trans_attend,
+      };
+      const new_station = new TransportStation(metadata);
+      map.displayStationMarker(new_station);
     }
   } else {
-    const existing_station_markers = map.getStationMarkers()
+    const existing_station_markers = map.getStationMarkers();
     for (const existing_station_coords of existing_station_markers.keys()) {
-      map.removeStationMarker(existing_station_coords)
+      map.removeStationMarker(existing_station_coords);
     }
   }
 }
@@ -144,7 +144,4 @@ function findStationMarkerByName(station_name) {
 
 export { map, routeState, totalState };
 export { updateMap };
-export {
-  openChosenStationPopup,
-  findStationMarkerByName,
-};
+export { openChosenStationPopup, findStationMarkerByName };
