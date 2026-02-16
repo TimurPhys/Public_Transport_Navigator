@@ -3,10 +3,9 @@ import { transportListEvent } from "../../../core/base.models.js";
 import { getScheduleTemplate } from "./schedule.template.js";
 import { map } from "../../../map/map.js";
 import { sidebarEvent } from "../../../core/base.models.js";
-import {
-  generateInfoContent,
-  generateStationsButtons,
-} from "./schedule.template.js";
+import StationManager from "./modules/stations.js";
+import SelectManager from "./modules/select.js";
+import InfoContentManager from "./modules/infoContent.js";
 
 class SidebarScheduleComponent extends BaseComponent {
   constructor(containerId) {
@@ -16,7 +15,10 @@ class SidebarScheduleComponent extends BaseComponent {
       collapsed_tables: [],
       station: null,
     };
+    this.initGlobalListeners();
+  }
 
+  initGlobalListeners() {
     transportListEvent.on("route:selected", (route_data) => {
       Object.assign(this.data, route_data); // Копируем поля из route_data в this.data
       this.show();
@@ -36,100 +38,97 @@ class SidebarScheduleComponent extends BaseComponent {
 
   render() {
     this.container.innerHTML = this.getTemplate();
-    this.containers = {
-      buttons_list: this.container.querySelector(".list-group"),
-      info_content: this.container.querySelector("#schedule-container"),
-    };
+
+    this.selectManager = new SelectManager(this.data, this.container);
+    this.stationManager = new StationManager(this.data, this.container);
+    this.InfoContentManager = new InfoContentManager(this.data, this.container);
 
     this.bindEvents();
   }
 
   // Events связанные с закрытием/открытием меню
-  bindSidebarEvents() {
-    const close_button = this.container.querySelector("#btn-close");
-    close_button.addEventListener("click", () => {
-      sidebarEvent.emit("sidebar:hidden", {});
-    });
-    const back_button = this.container.querySelector("#btn-back");
-    back_button.addEventListener("click", () => {
-      sidebarEvent.emit("sidebar:movedBack", {});
-    });
-  }
-  bindSelectEvents() {
-    const select = this.container.querySelector("select.form-select");
-    select.addEventListener("change", (e) => {
-      const selectedDirection = e.target.value;
-      this.data.direction = selectedDirection;
-      // const first_station = selectedDirection.split(" - ")[0];
-      // console.log(first_station);
-      // this.data.station = first_station;
-      this.render();
-    });
-  }
+  // bindSidebarEvents() {
+  //   const close_button = this.container.querySelector("#btn-close");
+  //   close_button.addEventListener("click", () => {
+  //     sidebarEvent.emit("sidebar:hidden", {});
+  //   });
+  //   const back_button = this.container.querySelector("#btn-back");
+  //   back_button.addEventListener("click", () => {
+  //     sidebarEvent.emit("sidebar:movedBack", {});
+  //   });
+  // }
+  // bindSelectEvents() {
+  //   const select = this.container.querySelector("select.form-select");
+  //   select.addEventListener("change", (e) => {
+  //     const selectedDirection = e.target.value;
+  //     this.data.direction = selectedDirection;
+  //     const first_station = selectedDirection.split(" - ")[0];
+  //     console.log(first_station);
+  //     this.data.station = first_station;
+  //     this.render();
+  //   });
+  // }
 
-  bindStationButtonsEvents() {
-    const station_buttons = this.container.querySelectorAll("a#station-button");
-    station_buttons.forEach((station_button) => {
-      station_button.addEventListener("click", () => {
-        station_buttons.forEach((station_button) => {
-          station_button.classList.remove("active");
-        });
-        station_button.classList.add("active");
-        const chosen_station_name = station_button.getAttribute("data-station");
-        this.data.station = chosen_station_name;
-        this.checkTablesCollapse();
-        this.containers.info_content.innerHTML = generateInfoContent(this.data);
-        this.bindEventsOnMinuteLinks();
-      });
-    });
-  }
+  // bindStationButtonsEvents() {
+  //   const station_buttons = this.container.querySelectorAll("a#station-button");
+  //   station_buttons.forEach((station_button) => {
+  //     station_button.addEventListener("click", () => {
+  //       station_buttons.forEach((station_button) => {
+  //         station_button.classList.remove("active");
+  //       });
+  //       station_button.classList.add("active");
+  //       const chosen_station_name = station_button.getAttribute("data-station");
+  //       this.data.station = chosen_station_name;
+  //       this.checkTablesCollapse();
+  //       this.containers.info_content.innerHTML = generateInfoContent(this.data);
+  //       this.bindEventsOnMinuteLinks();
+  //     });
+  //   });
+  // }
 
-  bindEventsOnMinuteLinks() {
-    const minute_links = this.container.querySelectorAll("a#minute-link");
-    minute_links.forEach((minute_link) => {
-      minute_link.addEventListener("click", () => {
-        minute_links.forEach((minute_link) => {
-          minute_link.classList.remove("active");
-        });
-        const hour = minute_link.getAttribute("data-hour");
-        const minutes = minute_link.textContent;
-        const daysType = minute_link.getAttribute("data-daysType");
-        minute_link.classList.add("active");
-      });
-    });
-  }
+  // bindEventsOnMinuteLinks() {
+  //   const minute_links = this.container.querySelectorAll("a#minute-link");
+  //   minute_links.forEach((minute_link) => {
+  //     minute_link.addEventListener("click", () => {
+  //       minute_links.forEach((minute_link) => {
+  //         minute_link.classList.remove("active");
+  //       });
+  //       const hour = minute_link.getAttribute("data-hour");
+  //       const minutes = minute_link.textContent;
+  //       const daysType = minute_link.getAttribute("data-daysType");
+  //       minute_link.classList.add("active");
+  //     });
+  //   });
+  // }
 
-  checkTablesCollapse() {
-    let collapsed_tables = [];
-    const tables = this.container.querySelectorAll("#button-collapse-table");
-    tables.forEach((table) => {
-      if (table.classList.contains("collapsed")) {
-        const table_type = table.getAttribute("data-dayType");
-        collapsed_tables.push(table_type);
-      }
-    });
-    this.data.collapsed_tables = collapsed_tables;
-  }
+  // checkTablesCollapse() {
+  //   let collapsed_tables = [];
+  //   const tables = this.container.querySelectorAll("#button-collapse-table");
+  //   tables.forEach((table) => {
+  //     if (table.classList.contains("collapsed")) {
+  //       const table_type = table.getAttribute("data-dayType");
+  //       collapsed_tables.push(table_type);
+  //     }
+  //   });
+  //   this.data.collapsed_tables = collapsed_tables;
+  // }
 
-  bindEvents() {
-    this.bindSelectEvents();
-    this.bindSidebarEvents();
-    this.bindStationButtonsEvents();
-    this.bindEventsOnMinuteLinks();
-  }
+  // bindEvents() {
+  //   this.bindSelectEvents();
+  //   this.bindSidebarEvents();
+  //   this.bindStationButtonsEvents();
+  //   this.bindEventsOnMinuteLinks();
+  // }
 
   hide() {
-    this.container.style.display = "none";
+    super.hide();
     map.setAllStationsEvents(true);
     map.setAllTransportsEvents(true);
   }
   show() {
-    this.container.style.display = "block"; // Или "flex", если используете его
-    // Отключаем events у маркеров на карте
+    super.show();
     map.setAllStationsEvents(false);
     map.setAllTransportsEvents(false);
-    // Всегда обновляем содержимое
-    this.render();
   }
 }
 

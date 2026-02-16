@@ -20,21 +20,14 @@ class BaseComponent {
     this.block_type = null;
   }
 
-  // 1. Сохраняем данные
-  setState(newData) {
-    this.data = newData;
-    this.render(); // Перерисовываем при изменении данных
-  }
-
-  // 2. Генерируем чистую строку HTML
+  // 1. Генерируем чистую строку HTML
   getTemplate() {
     return `<div>Base Template</div>`;
   }
+  к;
 
   // 3. Главный метод отрисовки
   render() {
-    if (!this.data) return;
-
     // Вставляем HTML
     this.container.innerHTML = this.getTemplate();
 
@@ -44,6 +37,16 @@ class BaseComponent {
 
   bindEvents() {
     // Переопределяется в дочерних классах
+  }
+
+  hide() {
+    this.container.classList.replace("component-active", "component-hidden");
+  }
+
+  show() {
+    if (this.container.innerHTML === "") this.render();
+    this.container.classList.remove("component-hidden");
+    this.container.classList.add("component-active");
   }
 }
 
