@@ -1,5 +1,5 @@
 import { BaseComponent } from "../../core/base.models.js";
-import { getNavbarTemplate } from "./templates/navbar.template.js";
+import { getNavbarTemplate } from "./navbar.template.js";
 import { bindFilterEvents } from "../../map/markers.visibility.js";
 import { sidebarEvent } from "../../core/base.models.js";
 

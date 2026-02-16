@@ -1,4 +1,4 @@
-import { translations } from "../../../../json/parse_json.js";
+import { translations } from "../../../json/parse_json.js";
 
 export const getNavbarTemplate = () => {
   return `

@@ -1,12 +1,12 @@
-import { BaseComponent } from "../../core/base.models.js";
-import { transportListEvent } from "../../core/base.models.js";
-import { getScheduleTemplate } from "./templates/schedule.template.js";
-import { map } from "../../map/map.js";
-import { sidebarEvent } from "../../core/base.models.js";
+import { BaseComponent } from "../../../core/base.models.js";
+import { transportListEvent } from "../../../core/base.models.js";
+import { getScheduleTemplate } from "./schedule.template.js";
+import { map } from "../../../map/map.js";
+import { sidebarEvent } from "../../../core/base.models.js";
 import {
   generateInfoContent,
   generateStationsButtons,
-} from "./templates/schedule.template.js";
+} from "./schedule.template.js";
 
 class SidebarScheduleComponent extends BaseComponent {
   constructor(containerId) {

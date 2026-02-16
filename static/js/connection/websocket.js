@@ -1,6 +1,5 @@
-import { updateMap } from "./map.js";
-import { translations } from "../../json/parse_json.js";
-import { transportListComponent } from "../components/desktop/list.sidebar.js";
+import { updateMap } from "../map/map.js";
+import { transportListComponent } from "../components/sidebar/list/list.js";
 
 let ws = null;
 let reconnectTimeout = null;
@@ -12,23 +11,23 @@ ws = new WebSocket(wsUrl);
 
 function connectWebSocket() {
   ws.onopen = () => {
-    transportListComponent.updateConnectionState("connected");
+    transportListComponent.statusManager.updateConnection("connected")
   };
 
   ws.onmessage = (event) => {
     const data = JSON.parse(event.data);
     if (data.type === "update") {
-      transportListComponent.updateConnectionState("connected");
-      transportListComponent.updateVehiclesQuantity(data.data.length);
+      transportListComponent.statusManager.updateConnection("connected")
+      transportListComponent.statusManager.updateQuantity(data.data.length);
       updateMap(data.data);
     } else if (data.type === "data_error") {
-      transportListComponent.updateConnectionState("no_answer");
-      transportListComponent.updateVehiclesQuantity(0);
+      transportListComponent.statusManager.updateConnection("default")
+      transportListComponent.statusManager.updateQuantity(0);
     }
   };
 
   ws.onclose = () => {
-    transportListComponent.updateConnectionState("disconnected");
+    transportListComponent.statusManager.updateConnection("default")
     reconnect();
   };
 
@@ -41,7 +40,7 @@ function connectWebSocket() {
 function reconnect() {
   if (reconnectTimeout) clearTimeout(reconnectTimeout);
   reconnectTimeout = setTimeout(() => {
-    transportListComponent.updateConnectionState("reconnection");
+    transportListComponent.statusManager.updateConnection("orange")
     connectWebSocket();
   }, 3000);
 }

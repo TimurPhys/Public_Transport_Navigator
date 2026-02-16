@@ -1,5 +1,4 @@
-import { translations } from "../../../../json/parse_json.js";
-import { time_tables } from "../../../../json/parse_json.js";
+import { translations, time_tables } from "../../../../json/parse_json.js";
 
 function generateDirectionSelect(data) {
   const route_id = data.id;

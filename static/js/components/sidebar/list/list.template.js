@@ -1,6 +1,5 @@
-import { translations } from "../../../../json/parse_json.js";
+import { translations, time_tables } from "../../../../json/parse_json.js";
 import { transportType_to_id } from "../../../routes/routes.js";
-import { time_tables } from "../../../../json/parse_json.js";
 
 export function generateRouteButtonsTemplates(typed_route) {
   const html_templates = {

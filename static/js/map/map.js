@@ -1,12 +1,6 @@
-import createLayers from "../core/map.style/map.styles.js";
-import { createCustomIcon } from "../core/map.style/markers.js";
 import { markersVisility } from "./markers.visibility.js";
-import { showPanel } from "../transports/show_labels.js";
 import { stations } from "../routes/routes.js";
-import { getStationIcon } from "../core/map.style/markers.js";
-import { mapType, translations } from "../../json/parse_json.js";
-import { removeCurrentRouteFromMap } from "../sidebar/show_schedule.js";
-import { transportListComponent } from "../components/desktop/list.sidebar.js";
+import { mapType} from "../../json/parse_json.js";
 
 import {
   TransportMap,
@@ -15,24 +9,9 @@ import {
   TransportMarker,
 } from "../core/map.models.js";
 
-const map = new TransportMap("map", [56.49, 21.02], mapType);
+export const map = new TransportMap("map", [56.49, 21.02], mapType);
 
-const routeState = {
-  currentPolyline: null,
-  currentArrows: null,
-  currentMarkers: [],
-  currentRoute: null,
-  currentNumber: null,
-  latlng: null,
-};
-const totalState = {
-  map_vehicles: [],
-  map_stations: [],
-};
-
-function updateMap(vehicles) {
-  // transport_quantity.textContent = vehicles.length;
-
+export function updateMap(vehicles) {
   // 1. Создаем Set локально при каждом обновлении
   const uniqueTransportMarkers = new Set();
 
@@ -108,40 +87,3 @@ export function refreshStations() {
     }
   }
 }
-
-function openChosenStationPopup(station_name) {
-  for (const marker of routeState.currentMarkers) {
-    const marker_popup_content = marker.getPopup().getContent();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(marker_popup_content, "text/html");
-    const cleanText = doc.body.textContent;
-    if (
-      cleanText === station_name ||
-      (cleanText === "Mirdzas Ķempes iela" && station_name === "M. Ķempes iela")
-    ) {
-      marker.openPopup();
-      break;
-    }
-  }
-}
-
-function findStationMarkerByName(station_name) {
-  for (const marker of routeState.currentMarkers) {
-    const marker_popup_content = marker.getPopup().getContent();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(marker_popup_content, "text/html");
-    const cleanText = doc.body.textContent;
-    if (
-      cleanText === station_name ||
-      (cleanText === "Mirdzas Ķempes iela" && station_name === "M. Ķempes iela")
-    ) {
-      return marker;
-    }
-  }
-}
-
-// -----------------------------------------------------------------------
-
-export { map, routeState, totalState };
-export { updateMap };
-export { openChosenStationPopup, findStationMarkerByName };
