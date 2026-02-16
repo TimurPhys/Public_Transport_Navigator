@@ -107,29 +107,6 @@ export function refreshStations() {
       map.removeStationMarker(existing_station_coords)
     }
   }
-  if (totalState.map_stations.length === 0 && yesNo === true) {
-    for (const station of stations) {
-      const marker = L.marker(station.coords, {
-        icon: getStationIcon("stationIcon", 0.8),
-      }).addTo(map);
-      marker.on("click", () => {
-        showPanel(map, null, station);
-      });
-      marker.bindPopup(`<b>${station.name}</b>`);
-      totalState.map_stations.push(marker);
-
-      clusterGroup.addLayer(marker);
-    }
-    map.addLayer(clusterGroup);
-  } else if (totalState.map_stations.length !== 0 && yesNo === false) {
-    for (const station_marker of totalState.map_stations) {
-      map.removeLayer(station_marker);
-      station_marker.off("click");
-    }
-    totalState.map_stations.length = 0;
-    clusterGroup.clearLayers();
-    map.removeLayer(clusterGroup);
-  }
 }
 
 function openChosenStationPopup(station_name) {
